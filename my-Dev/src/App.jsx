@@ -1,122 +1,142 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import axios from "axios";
+import {Link,Routes,Route,} from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {increment,decrement,reset,} from "./redux/counterSlice";
 
-function App() {
-  const [count, setCount] = useState(0)
+function Home() {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  const [name, setName] = useState("Mohid");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function getUser() {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/users/1"
+      );
+
+      setUser(response.data);
+    } catch {
+      setError("User data load nahi hua.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
+    <main className="mx-auto max-w-3xl space-y-8 p-8">
+      <section>
+        <h1 className="text-3xl font-bold">
+          My React Learning App
+        </h1>
+
+        <p className="mt-2">
+          Welcome, {name}!
+        </p>
+
         <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          className="mt-3 rounded bg-blue-600 px-4 py-2 text-white"
+          onClick={() => setName("React Developer")}
         >
-          Count is {count}
+          Change Name
         </button>
       </section>
 
-      <div className="ticks"></div>
+      <section className="rounded border p-5">
+        <h2 className="text-xl font-bold">
+          Redux Toolkit Counter
+        </h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <p className="my-3 text-2xl">{count}</p>
+
+        <div className="flex gap-3">
+          <button
+            className="rounded bg-green-600 px-3 py-2 text-white"
+            onClick={() => dispatch(increment())}
+          >
+            Increase
+          </button>
+
+          <button
+            className="rounded bg-red-600 px-3 py-2 text-white"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrease
+          </button>
+
+          <button
+            className="rounded bg-gray-700 px-3 py-2 text-white"
+            onClick={() => dispatch(reset())}
+          >
+            Reset
+          </button>
         </div>
       </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <section className="rounded border p-5">
+        <h2 className="text-xl font-bold">
+          Axios API Calling
+        </h2>
+
+        <button
+          className="mt-3 rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+          onClick={getUser}
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Get User"}
+        </button>
+
+        {error && <p className="mt-3 text-red-600">{error}</p>}
+
+        {user && (
+          <UserCard
+            name={user.name}
+            email={user.email}
+          />
+        )}
+      </section>
+    </main>
+  );
 }
 
-export default App
+function UserCard(props) {
+  return (
+    <div className="mt-4 rounded bg-gray-100 p-4 text-gray-900">
+      <h3 className="font-bold">{props.name}</h3>
+      <p>{props.email}</p>
+    </div>
+  );
+}
+
+function About() {
+  return <h1 className="p-8 text-2xl">About Page</h1>;
+}
+
+function Docs() {
+  return <h1 className="p-8 text-2xl">Docs Page</h1>;
+}
+
+export default function App() {
+  return (
+    <>
+      <nav className="flex gap-6 bg-slate-900 p-4 text-white">
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/docs">Docs</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/docs" element={<Docs />} />
+      </Routes>
+    </>
+  );
+}
