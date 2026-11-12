@@ -1,142 +1,59 @@
-import { useState } from "react";
-import axios from "axios";
-import {Link,Routes,Route,} from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {increment,decrement,reset,} from "./redux/counterSlice";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-function Home() {
-  const count = useSelector((state) => state.counter.value);
-  const dispatch = useDispatch();
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
-  const [name, setName] = useState("Mohid");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+import Home            from './pages/Home';
+import PersonalBanking from './pages/PersonalBanking';
+import BusinessBanking from './pages/BusinessBanking';
+import Cards           from './pages/Cards';
+import Loans           from './pages/Loans';
+import Savings         from './pages/Savings';
+import Investments     from './pages/Investments';
+import Dashboard       from './pages/Dashboard';
+import Transactions    from './pages/Transactions';
+import Profile         from './pages/Profile';
+import Admin           from './pages/Admin';
+import Support         from './pages/Support';
+import Contact         from './pages/Contact';
+import About           from './pages/About';
+import Login           from './pages/Login';
+import Register        from './pages/Register';
 
-  async function getUser() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/users/1"
-      );
-
-      setUser(response.data);
-    } catch {
-      setError("User data load nahi hua.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
+function Layout() {
   return (
-    <main className="mx-auto max-w-3xl space-y-8 p-8">
-      <section>
-        <h1 className="text-3xl font-bold">
-          My React Learning App
-        </h1>
+    <>
+      <Navbar />
 
-        <p className="mt-2">
-          Welcome, {name}!
-        </p>
+      <Routes>
+        <Route path="/"             element={<Home />} />
+        <Route path="/personal"     element={<PersonalBanking />} />
+        <Route path="/business"     element={<BusinessBanking />} />
+        <Route path="/cards"        element={<Cards />} />
+        <Route path="/loans"        element={<Loans />} />
+        <Route path="/savings"      element={<Savings />} />
+        <Route path="/investments"  element={<Investments />} />
+        <Route path="/dashboard"    element={<Dashboard />} />
+        <Route path="/transactions" element={<Transactions />} />
+        <Route path="/profile"      element={<Profile />} />
+        <Route path="/admin"        element={<Admin />} />
+        <Route path="/support"      element={<Support />} />
+        <Route path="/contact"      element={<Contact />} />
+        <Route path="/about"        element={<About />} />
+        <Route path="/login"        element={<Login />} />
+        <Route path="/register"     element={<Register />} />
+        <Route path="*"             element={<Navigate to="/" replace />} />
+      </Routes>
 
-        <button
-          className="mt-3 rounded bg-blue-600 px-4 py-2 text-white"
-          onClick={() => setName("React Developer")}
-        >
-          Change Name
-        </button>
-      </section>
-
-      <section className="rounded border p-5">
-        <h2 className="text-xl font-bold">
-          Redux Toolkit Counter
-        </h2>
-
-        <p className="my-3 text-2xl">{count}</p>
-
-        <div className="flex gap-3">
-          <button
-            className="rounded bg-green-600 px-3 py-2 text-white"
-            onClick={() => dispatch(increment())}
-          >
-            Increase
-          </button>
-
-          <button
-            className="rounded bg-red-600 px-3 py-2 text-white"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrease
-          </button>
-
-          <button
-            className="rounded bg-gray-700 px-3 py-2 text-white"
-            onClick={() => dispatch(reset())}
-          >
-            Reset
-          </button>
-        </div>
-      </section>
-
-      <section className="rounded border p-5">
-        <h2 className="text-xl font-bold">
-          Axios API Calling
-        </h2>
-
-        <button
-          className="mt-3 rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-          onClick={getUser}
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Get User"}
-        </button>
-
-        {error && <p className="mt-3 text-red-600">{error}</p>}
-
-        {user && (
-          <UserCard
-            name={user.name}
-            email={user.email}
-          />
-        )}
-      </section>
-    </main>
+      <Footer />
+    </>
   );
-}
-
-function UserCard(props) {
-  return (
-    <div className="mt-4 rounded bg-gray-100 p-4 text-gray-900">
-      <h3 className="font-bold">{props.name}</h3>
-      <p>{props.email}</p>
-    </div>
-  );
-}
-
-function About() {
-  return <h1 className="p-8 text-2xl">About Page</h1>;
-}
-
-function Docs() {
-  return <h1 className="p-8 text-2xl">Docs Page</h1>;
 }
 
 export default function App() {
   return (
-    <>
-      <nav className="flex gap-6 bg-slate-900 p-4 text-white">
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/docs">Docs</Link>
-      </nav>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/docs" element={<Docs />} />
-      </Routes>
-    </>
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }
