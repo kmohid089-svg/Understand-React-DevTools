@@ -19,6 +19,7 @@ import Contact         from './pages/Contact';
 import About           from './pages/About';
 import Login           from './pages/Login';
 import Register        from './pages/Register';
+import News            from './pages/News';
 
 function Layout() {
   return (
@@ -42,6 +43,7 @@ function Layout() {
         <Route path="/about"        element={<About />} />
         <Route path="/login"        element={<Login />} />
         <Route path="/register"     element={<Register />} />
+        <Route path="/news"         element={<News />} />
         <Route path="*"             element={<Navigate to="/" replace />} />
       </Routes>
 

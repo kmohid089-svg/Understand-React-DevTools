@@ -11,6 +11,7 @@ const links = [
   { label: 'Savings',     to: '/savings' },
   { label: 'Investments', to: '/investments' },
   { label: 'Support',     to: '/support' },
+  { label: 'News',        to: '/news' },
 ];
 
 const navCls = ({ isActive }) =>
