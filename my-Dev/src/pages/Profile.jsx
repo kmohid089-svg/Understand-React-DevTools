@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { UserRound, ShieldCheck, Bell, Globe, Save } from 'lucide-react';
 import { SectionTitle, FeatureCard } from '../components/Ui';
 
@@ -8,6 +9,19 @@ export default function Profile() {
   const [currency, setCurrency] = useState('PKR');
   const [alerts, setAlerts] = useState(true);
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/users/1');
+        setName(data.name);
+        setEmail(data.email);
+      } catch {
+        // silently ignore — fields keep their default values
+      }
+    }
+    fetchUser();
+  }, []);
 
   function handleSave() {
     setSaved(true);

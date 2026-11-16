@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Landmark, ShieldCheck, Smartphone, Globe2, ArrowUpRight, Wallet, CreditCard, ChartNoAxesCombined } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
@@ -50,6 +52,24 @@ function HeroCard() {
 }
 
 export default function Home() {
+  const [rates, setRates] = useState(null);
+  const [ratesLoading, setRatesLoading] = useState(true);
+  const [ratesError, setRatesError] = useState(null);
+
+  useEffect(() => {
+    async function fetchRates() {
+      try {
+        const { data } = await axios.get('https://open.er-api.com/v6/latest/USD');
+        setRates(data.rates);
+      } catch (err) {
+        setRatesError('Could not load live rates.');
+      } finally {
+        setRatesLoading(false);
+      }
+    }
+    fetchRates();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -107,6 +127,25 @@ export default function Home() {
         title="Ready to explore a better banking experience?"
         description="Create a demo profile and explore the MetaBank experience. This is a demonstration website, not a real financial institution."
       />
+
+      {/* Live Rates section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Live rates" title="Today's exchange rates" description="Rates fetched live from Open Exchange Rates API (base: USD)." />
+        {ratesLoading && <p className="text-slate-500">Loading rates…</p>}
+        {ratesError && <p className="text-red-500">{ratesError}</p>}
+        {rates && (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {[['USD', '🇺🇸'], ['PKR', '🇵🇰'], ['EUR', '🇪🇺'], ['GBP', '🇬🇧'], ['AED', '🇦🇪']].map(([code, flag]) => (
+              <div key={code} className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+                <p className="text-2xl">{flag}</p>
+                <p className="mt-2 text-lg font-black text-slate-950">{code}</p>
+                <p className="mt-1 text-2xl font-bold text-blue-700">{rates[code]?.toFixed(4)}</p>
+                <p className="mt-1 text-xs text-slate-400">per 1 USD</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

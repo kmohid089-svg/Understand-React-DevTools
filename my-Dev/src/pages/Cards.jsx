@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { CreditCard, LockKeyhole, Plane, ShoppingBag } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
@@ -70,6 +71,26 @@ export default function Cards() {
   const [frozen, setFrozen] = useState(false);
   const [tab, setTab] = useState('debit');
 
+  const [tips, setTips] = useState([]);
+  const [tipsLoading, setTipsLoading] = useState(true);
+  const [tipsError, setTipsError] = useState(null);
+
+  useEffect(() => {
+    async function fetchTips() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=3'
+        );
+        setTips(data);
+      } catch (err) {
+        setTipsError('Could not load card tips.');
+      } finally {
+        setTipsLoading(false);
+      }
+    }
+    fetchTips();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -137,6 +158,24 @@ export default function Cards() {
         to="/dashboard"
         label="Go to dashboard"
       />
+
+      {/* Card Tips section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Card tips" title="Tips for smarter card use" description="Demo articles from JSONPlaceholder API." />
+        {tipsLoading && <p className="text-slate-500">Loading tips…</p>}
+        {tipsError && <p className="text-red-500">{tipsError}</p>}
+        {tips.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {tips.map((tip) => (
+              <div key={tip.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Tip #{tip.id}</p>
+                <h3 className="mt-2 font-extrabold capitalize text-slate-900">{tip.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 line-clamp-3">{tip.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

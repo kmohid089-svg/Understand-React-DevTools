@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Target, CalendarDays, TrendingUp } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
@@ -35,6 +36,26 @@ function SavingsCard({ saved, setSaved, goal }) {
 export default function Savings() {
   const [goal, setGoal]   = useState(500000);
   const [saved, setSaved] = useState(175000);
+
+  const [todos, setTodos] = useState([]);
+  const [todosLoading, setTodosLoading] = useState(true);
+  const [todosError, setTodosError] = useState(null);
+
+  useEffect(() => {
+    async function fetchTodos() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/todos?userId=1&_limit=4'
+        );
+        setTodos(data);
+      } catch (err) {
+        setTodosError('Could not load savings goals.');
+      } finally {
+        setTodosLoading(false);
+      }
+    }
+    fetchTodos();
+  }, []);
 
   return (
     <>
@@ -82,6 +103,38 @@ export default function Savings() {
         to="/dashboard"
         label="Explore dashboard"
       />
+
+      {/* Savings Goals checklist */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Savings goals" title="Your savings checklist" description="Demo goals from JSONPlaceholder API." />
+        {todosLoading && <p className="text-slate-500">Loading goals…</p>}
+        {todosError && <p className="text-red-500">{todosError}</p>}
+        {todos.length > 0 && (
+          <ul className="mt-4 max-w-xl space-y-3">
+            {todos.map((todo) => (
+              <li
+                key={todo.id}
+                className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+              >
+                <span
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+                    todo.completed ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  {todo.completed ? '✓' : '○'}
+                </span>
+                <span
+                  className={`text-sm font-semibold ${
+                    todo.completed ? 'text-slate-400 line-through' : 'text-slate-800'
+                  }`}
+                >
+                  {todo.title}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </>
   );
 }

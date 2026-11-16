@@ -1,4 +1,115 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard } from '../components/Ui';
-export default function Contact(){const [form,setForm]=useState({name:'',email:'',topic:'General question',message:''});const [sent,setSent]=useState(false);const update=e=>setForm({...form,[e.target.name]:e.target.value});return <><PageHero eyebrow="Contact MetaBank" title="Let's start a" accent="conversation." description="Have a question about the website experience? Send a message using this local demo form." action={{to:'/support',label:'Visit help centre'}}><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl"><h2 className="text-2xl font-black text-slate-950">Get in touch</h2><div className="mt-6 space-y-5"><FeatureCard icon={Mail} title="Email" description="hello@metabank.example"/><FeatureCard icon={Phone} title="Phone" description="+92 300 000 0000 (sample contact)"/><FeatureCard icon={MapPin} title="Office" description="Business district, Lahore, Pakistan (sample address)"/></div></div></PageHero><section className="mx-auto max-w-7xl px-5 py-16"><div className="grid gap-12 lg:grid-cols-2"><div><SectionTitle eyebrow="Send a message" title="How can we help?" description="Complete the fields and submit. This demo form displays a local confirmation only; it does not send an email."/>{sent&&<p className="mb-5 rounded-xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">Demo message submitted. No email was sent or stored.</p>}<form onSubmit={e=>{e.preventDefault();setSent(true);setForm({name:'',email:'',topic:'General question',message:''})}} className="space-y-4"><div className="grid gap-4 sm:grid-cols-2"><input required name="name" value={form.name} onChange={update} placeholder="Your name" className="rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600"/><input required type="email" name="email" value={form.email} onChange={update} placeholder="Email address" className="rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600"/></div><select name="topic" value={form.topic} onChange={update} className="w-full rounded-xl border border-slate-200 p-4"><option>General question</option><option>Personal banking</option><option>Business banking</option><option>Cards and payments</option><option>Technical support</option></select><textarea required rows="5" name="message" value={form.message} onChange={update} placeholder="Tell us how we can help..." className="w-full rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600"/><button className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-6 py-4 font-bold text-white"><Send size={18}/>Submit demo message</button></form></div><div className="rounded-3xl bg-slate-950 p-8 text-white"><p className="text-sm font-bold uppercase tracking-widest text-blue-300">A note about this website</p><h3 className="mt-4 text-3xl font-black">A demo concept, designed to be explored.</h3><p className="mt-5 leading-8 text-slate-300">MetaBank is a fictional banking website concept. Contact details are placeholders, and this form does not connect to a support team. Replace these details with verified business information before any public launch.</p></div></div></section></>}
+
+export default function Contact() {
+  const [form, setForm] = useState({ name: '', email: '', topic: 'General question', message: '' });
+  const [sent, setSent] = useState(false);
+  const update = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const [pkInfo, setPkInfo] = useState(null);
+  const [pkLoading, setPkLoading] = useState(true);
+  const [pkError, setPkError] = useState(null);
+
+  useEffect(() => {
+    async function fetchPk() {
+      try {
+        const { data } = await axios.get('https://restcountries.com/v3.1/alpha/pk');
+        setPkInfo(data[0]);
+      } catch (err) {
+        setPkError('Could not load Pakistan office info.');
+      } finally {
+        setPkLoading(false);
+      }
+    }
+    fetchPk();
+  }, []);
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Contact MetaBank"
+        title="Let's start a"
+        accent="conversation."
+        description="Have a question about the website experience? Send a message using this local demo form."
+        action={{ to: '/support', label: 'Visit help centre' }}
+      >
+        <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl">
+          <h2 className="text-2xl font-black text-slate-950">Get in touch</h2>
+          <div className="mt-6 space-y-5">
+            <FeatureCard icon={Mail}   title="Email"  description="hello@metabank.example" />
+            <FeatureCard icon={Phone}  title="Phone"  description="+92 300 000 0000 (sample contact)" />
+            <FeatureCard icon={MapPin} title="Office" description="Business district, Lahore, Pakistan (sample address)" />
+          </div>
+        </div>
+      </PageHero>
+
+      <section className="mx-auto max-w-7xl px-5 py-16">
+        <div className="grid gap-12 lg:grid-cols-2">
+          <div>
+            <SectionTitle
+              eyebrow="Send a message"
+              title="How can we help?"
+              description="Complete the fields and submit. This demo form displays a local confirmation only; it does not send an email."
+            />
+            {sent && (
+              <p className="mb-5 rounded-xl bg-emerald-50 p-4 text-sm font-semibold text-emerald-800">
+                Demo message submitted. No email was sent or stored.
+              </p>
+            )}
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                setSent(true);
+                setForm({ name: '', email: '', topic: 'General question', message: '' });
+              }}
+              className="space-y-4"
+            >
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input required name="name" value={form.name} onChange={update} placeholder="Your name" className="rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600" />
+                <input required type="email" name="email" value={form.email} onChange={update} placeholder="Email address" className="rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600" />
+              </div>
+              <select name="topic" value={form.topic} onChange={update} className="w-full rounded-xl border border-slate-200 p-4">
+                <option>General question</option>
+                <option>Personal banking</option>
+                <option>Business banking</option>
+                <option>Cards and payments</option>
+                <option>Technical support</option>
+              </select>
+              <textarea required rows="5" name="message" value={form.message} onChange={update} placeholder="Tell us how we can help..." className="w-full rounded-xl border border-slate-200 p-4 outline-none focus:border-blue-600" />
+              <button className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-6 py-4 font-bold text-white">
+                <Send size={18} /> Submit demo message
+              </button>
+            </form>
+          </div>
+
+          <div className="rounded-3xl bg-slate-950 p-8 text-white">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-300">A note about this website</p>
+            <h3 className="mt-4 text-3xl font-black">A demo concept, designed to be explored.</h3>
+            <p className="mt-5 leading-8 text-slate-300">
+              MetaBank is a fictional banking website concept. Contact details are placeholders, and this form does not connect to a support team. Replace these details with verified business information before any public launch.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pakistan Office Info */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Our office" title="Pakistan headquarters" description="Country info from REST Countries API." />
+        {pkLoading && <p className="text-slate-500">Loading office info…</p>}
+        {pkError && <p className="text-red-500">{pkError}</p>}
+        {pkInfo && (
+          <div className="flex max-w-sm items-center gap-6 rounded-2xl border bg-white p-6 shadow-sm">
+            <img src={pkInfo.flags?.png} alt={pkInfo.name?.common} className="h-16 w-24 rounded-lg object-cover shadow" />
+            <div>
+              <p className="text-xl font-black text-slate-900">{pkInfo.name?.common}</p>
+              <p className="mt-1 text-sm text-slate-500">{pkInfo.region} · {pkInfo.subregion}</p>
+              <p className="mt-2 text-xs font-bold text-blue-700">Capital: {pkInfo.capital?.[0]}</p>
+            </div>
+          </div>
+        )}
+      </section>
+    </>
+  );
+}

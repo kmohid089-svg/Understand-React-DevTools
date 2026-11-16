@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Wallet, ArrowUpRight, ArrowDownLeft, Eye, EyeOff, Plus, Send, Download, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -20,6 +21,24 @@ const bars = [35, 55, 45, 70, 52, 85, 65, 95, 72, 80, 60, 90];
 export default function Dashboard() {
   const [visible, setVisible] = useState(true);
   const rows = initialRows;
+
+  const [holder, setHolder] = useState(null);
+  const [holderLoading, setHolderLoading] = useState(true);
+  const [holderError, setHolderError] = useState(null);
+
+  useEffect(() => {
+    async function fetchHolder() {
+      try {
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/users/1');
+        setHolder(data);
+      } catch (err) {
+        setHolderError('Could not load account holder info.');
+      } finally {
+        setHolderLoading(false);
+      }
+    }
+    fetchHolder();
+  }, []);
 
   return (
     <main className="min-h-[70vh] bg-slate-50">
@@ -127,6 +146,30 @@ export default function Dashboard() {
         <p className="mt-6 rounded-xl bg-amber-50 p-4 text-sm text-amber-800">
           Demo notice: balances and transactions are fictional. No real account, transfer or deposit is connected.
         </p>
+
+        {/* Account Holder Info Card */}
+        <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6">
+          <h2 className="text-xl font-black text-slate-950">Account Holder</h2>
+          <p className="mt-1 text-sm text-slate-500">Data fetched from JSONPlaceholder API.</p>
+          {holderLoading && <p className="mt-4 text-slate-500">Loading account holder…</p>}
+          {holderError && <p className="mt-4 text-red-500">{holderError}</p>}
+          {holder && (
+            <div className="mt-5 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Name</p>
+                <p className="mt-1 font-extrabold text-slate-900">{holder.name}</p>
+              </div>
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Email</p>
+                <p className="mt-1 font-extrabold text-slate-900">{holder.email}</p>
+              </div>
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Company</p>
+                <p className="mt-1 font-extrabold text-slate-900">{holder.company?.name}</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );

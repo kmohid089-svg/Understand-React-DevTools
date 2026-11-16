@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Building2, Users, Receipt, ChartNoAxesCombined, CreditCard, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
 
@@ -29,6 +31,26 @@ function HeroPanel() {
 }
 
 export default function BusinessBanking() {
+  const [news, setNews] = useState([]);
+  const [newsLoading, setNewsLoading] = useState(true);
+  const [newsError, setNewsError] = useState(null);
+
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=3'
+        );
+        setNews(data);
+      } catch (err) {
+        setNewsError('Could not load business news.');
+      } finally {
+        setNewsLoading(false);
+      }
+    }
+    fetchNews();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -98,6 +120,24 @@ export default function BusinessBanking() {
         to="/contact"
         label="Contact business team"
       />
+
+      {/* Business News section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Business news" title="Latest business insights" description="Demo articles from JSONPlaceholder API." />
+        {newsLoading && <p className="text-slate-500">Loading news…</p>}
+        {newsError && <p className="text-red-500">{newsError}</p>}
+        {news.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {news.map((post) => (
+              <div key={post.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Article #{post.id}</p>
+                <h3 className="mt-2 font-extrabold capitalize text-slate-900">{post.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 line-clamp-3">{post.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

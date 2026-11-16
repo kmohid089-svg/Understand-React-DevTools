@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ChartNoAxesCombined, Globe, Layers3, Scale, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
 
@@ -24,6 +26,26 @@ function PortfolioCard() {
 }
 
 export default function Investments() {
+  const [crypto, setCrypto] = useState([]);
+  const [cryptoLoading, setCryptoLoading] = useState(true);
+  const [cryptoError, setCryptoError] = useState(null);
+
+  useEffect(() => {
+    async function fetchCrypto() {
+      try {
+        const { data } = await axios.get(
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=4&page=1'
+        );
+        setCrypto(data);
+      } catch (err) {
+        setCryptoError('Could not load market prices.');
+      } finally {
+        setCryptoLoading(false);
+      }
+    }
+    fetchCrypto();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -67,6 +89,37 @@ export default function Investments() {
         to="/support"
         label="Explore support"
       />
+
+      {/* Market Prices section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Market prices" title="Live crypto market overview" description="Real-time prices from CoinGecko API." />
+        {cryptoLoading && <p className="text-slate-500">Loading market data…</p>}
+        {cryptoError && <p className="text-red-500">{cryptoError}</p>}
+        {crypto.length > 0 && (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {crypto.map((coin) => (
+              <div key={coin.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <img src={coin.image} alt={coin.name} className="h-10 w-10" />
+                  <div>
+                    <p className="font-black text-slate-900">{coin.name}</p>
+                    <p className="text-xs uppercase text-slate-500">{coin.symbol}</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-2xl font-bold text-slate-950">${coin.current_price?.toLocaleString()}</p>
+                <p
+                  className={`mt-1 text-sm font-bold ${
+                    coin.price_change_percentage_24h >= 0 ? 'text-emerald-600' : 'text-red-600'
+                  }`}
+                >
+                  {coin.price_change_percentage_24h >= 0 ? '+' : ''}
+                  {coin.price_change_percentage_24h?.toFixed(2)}% (24h)
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

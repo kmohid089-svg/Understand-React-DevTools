@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Wallet, PiggyBank, ArrowLeftRight, Smartphone, ReceiptText, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
@@ -26,6 +28,26 @@ function AccountCard() {
 }
 
 export default function PersonalBanking() {
+  const [updates, setUpdates] = useState([]);
+  const [updatesLoading, setUpdatesLoading] = useState(true);
+  const [updatesError, setUpdatesError] = useState(null);
+
+  useEffect(() => {
+    async function fetchUpdates() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=3'
+        );
+        setUpdates(data);
+      } catch (err) {
+        setUpdatesError('Could not load latest updates.');
+      } finally {
+        setUpdatesLoading(false);
+      }
+    }
+    fetchUpdates();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -61,6 +83,24 @@ export default function PersonalBanking() {
         to="/dashboard"
         label="Open dashboard"
       />
+
+      {/* Latest Updates section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Latest updates" title="What's new in personal banking" description="Demo content from JSONPlaceholder API." />
+        {updatesLoading && <p className="text-slate-500">Loading updates…</p>}
+        {updatesError && <p className="text-red-500">{updatesError}</p>}
+        {updates.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {updates.map((post) => (
+              <div key={post.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Update #{post.id}</p>
+                <h3 className="mt-2 font-extrabold capitalize text-slate-900">{post.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 line-clamp-3">{post.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

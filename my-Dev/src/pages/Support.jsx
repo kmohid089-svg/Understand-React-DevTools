@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { HelpCircle, MessageCircle, ShieldQuestion, CreditCard, UserRound } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
@@ -42,6 +43,26 @@ function HeroCard() {
 
 export default function Support() {
   const [active, setActive] = useState(0);
+
+  const [articles, setArticles] = useState([]);
+  const [articlesLoading, setArticlesLoading] = useState(true);
+  const [articlesError, setArticlesError] = useState(null);
+
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=3'
+        );
+        setArticles(data);
+      } catch (err) {
+        setArticlesError('Could not load help articles.');
+      } finally {
+        setArticlesLoading(false);
+      }
+    }
+    fetchArticles();
+  }, []);
 
   return (
     <>
@@ -106,6 +127,24 @@ export default function Support() {
         to="/contact"
         label="Contact us"
       />
+
+      {/* Help Articles section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Help articles" title="Browse our help content" description="Demo articles from JSONPlaceholder API." />
+        {articlesLoading && <p className="text-slate-500">Loading articles…</p>}
+        {articlesError && <p className="text-red-500">{articlesError}</p>}
+        {articles.length > 0 && (
+          <div className="grid gap-5 md:grid-cols-3">
+            {articles.map((post) => (
+              <div key={post.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Article #{post.id}</p>
+                <h3 className="mt-2 font-extrabold capitalize text-slate-900">{post.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600 line-clamp-3">{post.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </>
   );
 }

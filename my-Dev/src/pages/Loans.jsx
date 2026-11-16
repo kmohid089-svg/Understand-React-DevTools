@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import axios from 'axios';
 import { Home, Car, GraduationCap, BriefcaseBusiness } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
@@ -38,6 +39,26 @@ function Calculator() {
 }
 
 export default function Loans() {
+  const [countries, setCountries] = useState([]);
+  const [countriesLoading, setCountriesLoading] = useState(true);
+  const [countriesError, setCountriesError] = useState(null);
+
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const { data } = await axios.get(
+          'https://restcountries.com/v3.1/region/asia?fields=name,currencies'
+        );
+        setCountries(data.slice(0, 4));
+      } catch (err) {
+        setCountriesError('Could not load country data.');
+      } finally {
+        setCountriesLoading(false);
+      }
+    }
+    fetchCountries();
+  }, []);
+
   return (
     <>
       <PageHero
@@ -70,6 +91,30 @@ export default function Loans() {
         to="/support"
         label="Visit support"
       />
+
+      {/* Asian Countries & Currencies section */}
+      <section className="mx-auto max-w-7xl px-5 py-14">
+        <SectionTitle eyebrow="Regional info" title="Asian countries and currencies" description="Data from REST Countries API." />
+        {countriesLoading && <p className="text-slate-500">Loading country data…</p>}
+        {countriesError && <p className="text-red-500">{countriesError}</p>}
+        {countries.length > 0 && (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {countries.map((c) => {
+              const currencyCode = Object.keys(c.currencies || {})[0] || '—';
+              const currencyName = c.currencies?.[currencyCode]?.name || '—';
+              return (
+                <div key={c.name.common} className="rounded-2xl border bg-white p-5 shadow-sm">
+                  <p className="font-black text-slate-900">{c.name.common}</p>
+                  <p className="mt-2 text-sm text-slate-500">{currencyName}</p>
+                  <span className="mt-3 inline-block rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                    {currencyCode}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
     </>
   );
 }
