@@ -1,0 +1,9 @@
+[
+  { "id": 1, "title": "Salary credit",       "category": "Income",    "amount": "125000",  "date": "2026-11-02", "type": "Credit" },
+  { "id": 2, "title": "Grocery store",       "category": "Shopping",  "amount": "-8450",   "date": "2026-11-01", "type": "Debit"  },
+  { "id": 3, "title": "Electricity bill",    "category": "Utilities", "amount": "-12600",  "date": "2026-10-28", "type": "Debit"  },
+  { "id": 4, "title": "Online subscription", "category": "Services",  "amount": "-2100",   "date": "2026-10-26", "type": "Debit"  },
+  { "id": 5, "title": "Freelance payment",   "category": "Income",    "amount": "45000",   "date": "2026-10-24", "type": "Credit" },
+  { "id": 6, "title": "Fuel station",        "category": "Transport", "amount": "-6500",   "date": "2026-10-22", "type": "Debit"  },
+  { "id": 7, "title": "Restaurant",          "category": "Food",      "amount": "-3200",   "date": "2026-10-20", "type": "Debit"  }
+]
