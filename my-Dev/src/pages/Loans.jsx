@@ -47,11 +47,11 @@ export default function Loans() {
     async function fetchCountries() {
       try {
         const { data } = await axios.get(
-          'https://restcountries.com/v3.1/region/asia?fields=name,currencies'
+          'https://jsonplaceholder.typicode.com/users?_limit=4'
         );
-        setCountries(data.slice(0, 4));
+        setCountries(data);
       } catch (err) {
-        setCountriesError('Could not load country data.');
+        setCountriesError('Could not load data.');
       } finally {
         setCountriesLoading(false);
       }
@@ -94,24 +94,20 @@ export default function Loans() {
 
       {/* Asian Countries & Currencies section */}
       <section className="mx-auto max-w-7xl px-5 py-14">
-        <SectionTitle eyebrow="Regional info" title="Asian countries and currencies" description="Data from REST Countries API." />
+        <SectionTitle eyebrow="Our Partners" title="Loan advisors" description="Data from JSONPlaceholder API." />
         {countriesLoading && <p className="text-slate-500">Loading country data…</p>}
         {countriesError && <p className="text-red-500">{countriesError}</p>}
         {countries.length > 0 && (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {countries.map((c) => {
-              const currencyCode = Object.keys(c.currencies || {})[0] || '—';
-              const currencyName = c.currencies?.[currencyCode]?.name || '—';
-              return (
-                <div key={c.name.common} className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <p className="font-black text-slate-900">{c.name.common}</p>
-                  <p className="mt-2 text-sm text-slate-500">{currencyName}</p>
-                  <span className="mt-3 inline-block rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                    {currencyCode}
-                  </span>
-                </div>
-              );
-            })}
+            {countries.map((c) => (
+              <div key={c.id} className="rounded-2xl border bg-white p-5 shadow-sm">
+                <p className="font-black text-slate-900">{c.name}</p>
+                <p className="mt-2 text-sm text-slate-500">{c.email}</p>
+                <span className="mt-3 inline-block rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                  {c.company.name}
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </section>
