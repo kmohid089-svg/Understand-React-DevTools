@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Wallet, ArrowUpRight, ArrowDownLeft, Eye, EyeOff, Plus, Send, Download, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const initialRows = [
   ['Salary credit',       'Income',   '+ PKR 125,000', 'Today'],
@@ -21,6 +22,7 @@ const bars = [35, 55, 45, 70, 52, 85, 65, 95, 72, 80, 60, 90];
 export default function Dashboard() {
   const [visible, setVisible] = useState(true);
   const rows = initialRows;
+  const { user } = useAuth();
 
   const [holder, setHolder] = useState(null);
   const [holderLoading, setHolderLoading] = useState(true);
@@ -48,7 +50,7 @@ export default function Dashboard() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-sm font-bold text-blue-700">ACCOUNT OVERVIEW</p>
-            <h1 className="mt-2 text-3xl font-black text-slate-950 md:text-4xl">Welcome back, Mohid</h1>
+            <h1 className="mt-2 text-3xl font-black text-slate-950 md:text-4xl">Welcome back, {user?.name ?? 'Mohid'}</h1>
             <p className="mt-2 text-slate-500">Here is your illustrative financial snapshot.</p>
           </div>
           <Link to="/profile" className="rounded-xl border border-slate-200 bg-white px-4 py-3 font-bold text-slate-700">

@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -32,12 +34,12 @@ function Layout() {
         <Route path="/business"     element={<BusinessBanking />} />
         <Route path="/cards"        element={<Cards />} />
         <Route path="/loans"        element={<Loans />} />
-        <Route path="/savings"      element={<Savings />} />
-        <Route path="/investments"  element={<Investments />} />
-        <Route path="/dashboard"    element={<Dashboard />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/profile"      element={<Profile />} />
-        <Route path="/admin"        element={<Admin />} />
+        <Route path="/savings"      element={<ProtectedRoute><Savings /></ProtectedRoute>} />
+        <Route path="/investments"  element={<ProtectedRoute><Investments /></ProtectedRoute>} />
+        <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
+        <Route path="/profile"      element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/admin"        element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         <Route path="/support"      element={<Support />} />
         <Route path="/contact"      element={<Contact />} />
         <Route path="/about"        element={<About />} />
@@ -55,7 +57,9 @@ function Layout() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout />
+      <AuthProvider>
+        <Layout />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
