@@ -1,24 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Landmark, ShieldCheck, Smartphone, Globe2, ArrowUpRight, Wallet, CreditCard, ChartNoAxesCombined } from 'lucide-react';
+import { Landmark, ShieldCheck, Smartphone, Globe2, ArrowUpRight, Wallet, CreditCard, ChartNoAxesCombined, BadgeCheck, Clock, Lock, User, Briefcase, TrendingUp, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
-
-const features = [
-  { icon: Wallet,               title: 'Personal banking',    description: 'Manage everyday accounts, move money in your demo workspace and stay on top of your spending.' },
-  { icon: Landmark,             title: 'Business banking',    description: 'Explore business account features, payment workflows and cash-flow visibility.' },
-  { icon: CreditCard,           title: 'Cards with control',  description: 'Review card options and try demo card controls, including freeze and unfreeze.' },
-  { icon: ChartNoAxesCombined,  title: 'Savings and goals',   description: 'Set a target, track your progress and build a savings habit at your own pace.' },
-  { icon: Globe2,               title: 'Investment overview', description: 'Explore a sample portfolio view and learn about diversified investment categories.' },
-  { icon: ShieldCheck,          title: 'Security first',      description: 'Understand account protection features, alerts and responsible digital banking.' },
-];
-
-const stats = [
-  { value: '24/7',          label: 'Digital access concept' },
-  { value: '3 min',         label: 'Illustrative account setup' },
-  { value: 'Multi-currency',label: 'Designed for global needs' },
-  { value: 'One view',      label: 'Accounts and activity' },
-];
 
 function HeroCard() {
   return (
@@ -72,63 +56,60 @@ export default function Home() {
 
   return (
     <>
+      {/* 1. Hero */}
       <PageHero
         dark
-        eyebrow="Banking, reimagined"
-        title="A smarter way to"
-        accent="move forward."
-        description="Bring everyday banking, savings goals and financial insights together in one clear digital experience. Built for people and businesses with big plans."
-        action={{ to: '/register', label: 'Open your account' }}
-        secondary={{ to: '/about', label: 'Discover MetaBank' }}
+        eyebrow="Pakistan's Digital Bank"
+        title="Banking made"
+        accent="simple & secure."
+        description="Open your MetaBank account in minutes. Zero hidden fees, real-time transfers, and bank-grade security — all from your phone or browser."
+        action={{to: '/register', label: 'Open Account'}}
+        secondary={{to: '/login', label: 'Sign In'}}
       >
         <HeroCard />
       </PageHero>
 
+      {/* 2. Why MetaBank */}
       <section className="mx-auto max-w-7xl px-5 py-16">
         <SectionTitle
-          eyebrow="One connected experience"
-          title="Banking that fits your life"
-          description="From daily spending to long-term plans, explore tools designed to make money management feel simpler."
+          eyebrow="Why MetaBank"
+          title="Everything you need, nothing you don't"
+          description="Built from the ground up for Pakistanis who want a modern banking experience."
         />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {features.map(f => (
-            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} />
-          ))}
+        <div className="grid gap-5 md:grid-cols-3">
+          <FeatureCard icon={BadgeCheck} title="Zero hidden fees" description="No monthly charges, no surprise deductions. What you see is what you keep." />
+          <FeatureCard icon={Clock} title="24/7 Digital banking" description="Transfer money, pay bills and check your balance any time, any day — even on holidays." />
+          <FeatureCard icon={Lock} title="Bank-grade security" description="256-bit encryption, two-factor authentication and real-time fraud alerts protect every transaction." />
         </div>
       </section>
 
+      {/* 3. Products */}
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-5">
-          <SectionTitle eyebrow="At a glance" title="A clearer view of your finances" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map(s => <Stat key={s.value} value={s.value} label={s.label} />)}
+          <SectionTitle
+            eyebrow="Our Products"
+            title="The right account for every goal"
+            description="Whether you're saving for tomorrow or running a business today, we have you covered."
+          />
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: User,       title: 'Personal Account',  desc: 'Everyday banking with zero fees, free transfers and instant notifications.' },
+              { icon: Briefcase,  title: 'Business Account',  desc: 'Dedicated IBAN, bulk payments and cash-flow dashboard for your business.' },
+              { icon: CreditCard, title: 'MetaCard',          desc: 'Virtual and physical debit card with real-time spend controls.' },
+              { icon: TrendingUp, title: 'Investments',       desc: 'Grow your savings with mutual funds and government bonds from PKR 1,000.' },
+            ].map(p => (
+              <article key={p.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+                <span className="mb-5 inline-flex rounded-2xl bg-blue-50 p-3 text-blue-700"><p.icon size={23} /></span>
+                <h3 className="text-xl font-extrabold text-slate-950">{p.title}</h3>
+                <p className="mt-3 leading-7 text-slate-600">{p.desc}</p>
+                <Link to="/register" className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-blue-700 hover:underline">Learn more <ArrowUpRight size={14} /></Link>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-2 md:items-center">
-        <div className="rounded-[2rem] bg-slate-950 p-8 text-white md:p-12">
-          <p className="text-sm font-bold uppercase tracking-widest text-blue-300">Your money, in focus</p>
-          <h2 className="mt-4 text-4xl font-black">Less guesswork. More confidence.</h2>
-          <p className="mt-5 leading-8 text-slate-300">
-            See spending patterns, review activity and keep your financial priorities close with a dashboard made for everyday decisions.
-          </p>
-          <Link to="/dashboard" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-bold">
-            Explore dashboard <ArrowUpRight size={18} />
-          </Link>
-        </div>
-        <div className="space-y-5">
-          <FeatureCard icon={Smartphone}  title="A consistent digital experience" description="Move between account information, support and planning tools with a familiar interface." />
-          <FeatureCard icon={ShieldCheck} title="Built around trust"               description="Clear information, security education and transparent demo experiences are part of every step." />
-        </div>
-      </section>
-
-      <CTA
-        title="Ready to explore a better banking experience?"
-        description="Create a demo profile and explore the MetaBank experience. This is a demonstration website, not a real financial institution."
-      />
-
-      {/* Live Rates section */}
+      {/* 4. Live Exchange Rates */}
       <section className="mx-auto max-w-7xl px-5 py-14">
         <SectionTitle eyebrow="Live rates" title="Today's exchange rates" description="Rates fetched live from Open Exchange Rates API (base: USD)." />
         {ratesLoading && <p className="text-slate-500">Loading rates…</p>}
@@ -146,6 +127,57 @@ export default function Home() {
           </div>
         )}
       </section>
+
+      {/* 5. How it works */}
+      <section className="bg-slate-950 py-16 text-white">
+        <div className="mx-auto max-w-7xl px-5">
+          <SectionTitle eyebrow="How it works" title="Up and running in 3 steps" />
+          <div className="grid gap-8 md:grid-cols-3">
+            {[
+              { step: '01', title: 'Create account',    desc: 'Fill in your name, email and phone number. Takes less than 2 minutes.' },
+              { step: '02', title: 'Verify identity',   desc: 'Upload your CNIC photo. Our system verifies it automatically.' },
+              { step: '03', title: 'Start banking',     desc: 'Your account is live. Transfer, pay and save right away.' },
+            ].map(item => (
+              <div key={item.step} className="rounded-3xl border border-white/10 bg-white/5 p-8">
+                <p className="text-5xl font-black text-blue-500">{item.step}</p>
+                <h3 className="mt-5 text-xl font-extrabold">{item.title}</h3>
+                <p className="mt-3 leading-7 text-slate-400">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Testimonials */}
+      <section className="mx-auto max-w-7xl px-5 py-16">
+        <SectionTitle eyebrow="Customer stories" title="Trusted by thousands across Pakistan" center />
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            { quote: 'MetaBank made my salary transfers instant. I no longer wait two days for funds to clear.', name: 'Zara Ahmed', city: 'Karachi' },
+            { quote: 'Setting up my business account took five minutes. The dashboard is incredibly clear.', name: 'Hamza Raza', city: 'Lahore' },
+            { quote: 'The MetaCard works everywhere. Zero fees abroad saved me a lot on my last trip.', name: 'Ayesha Malik', city: 'Islamabad' },
+          ].map(t => (
+            <div key={t.name} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <p className="leading-7 text-slate-600">"{t.quote}"</p>
+              <div className="mt-6 flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700">{t.name[0]}</span>
+                <div>
+                  <p className="font-extrabold text-slate-950">{t.name}</p>
+                  <p className="text-sm text-slate-500">{t.city}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 7. Final CTA */}
+      <CTA
+        title="Join thousands of customers banking smarter"
+        description="Open your MetaBank account today. No paperwork, no branch visits, no hidden fees."
+        to="/register"
+        label="Open Account"
+      />
     </>
   );
 }

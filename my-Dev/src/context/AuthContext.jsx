@@ -11,15 +11,18 @@ export function AuthProvider({ children }) {
   function login(userData) {
     setUser(userData);
     localStorage.setItem('mb_user', JSON.stringify(userData));
+    // token is saved by the Login page via localStorage.setItem('mb_token', ...)
+    // but if login() is called without a token (demo mode), we don't overwrite it
   }
 
   function logout() {
     setUser(null);
     localStorage.removeItem('mb_user');
+    localStorage.removeItem('mb_token');
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{user, login, logout}}>
       {children}
     </AuthContext.Provider>
   );

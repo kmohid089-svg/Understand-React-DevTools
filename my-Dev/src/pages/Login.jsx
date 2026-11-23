@@ -2,23 +2,46 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Landmark, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return;
-    }
     setError('');
-    login({ name: 'Mohid Khan', email });
-    navigate('/dashboard');
+    setLoading(true);
+    try {
+      const res = await axios.post('http://localhost:4000/api/auth/login', { email, password });
+      login({
+        name: res.data.user.name,
+        email: res.data.user.email,
+        accountNumber: res.data.user.accountNumber,
+        balance: res.data.user.balance,
+      });
+      localStorage.setItem('mb_token', res.data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      if (!err.response) {
+        // Server offline — fall back to demo mode
+        if (password.length >= 6) {
+          setError('Server offline — using demo mode');
+          login({ name: 'Demo User', email, accountNumber: 'MB-DEMO-0000', balance: 0 });
+          setTimeout(() => navigate('/dashboard'), 1200);
+        } else {
+          setError('Server offline — using demo mode. Password must be at least 6 characters.');
+        }
+      } else {
+        setError(err.response?.data?.message || 'Incorrect email or password');
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -43,7 +66,7 @@ export default function Login() {
           </div>
           <p className="text-sm font-bold uppercase tracking-widest text-blue-700">Secure access</p>
           <h2 className="mt-2 text-3xl font-black text-slate-950">Sign in</h2>
-          <p className="mt-2 text-slate-500">Enter demo details to preview the form.</p>
+          <p className="mt-2 text-slate-500">Enter your MetaBank credentials to continue.</p>
 
           {error && <p className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
@@ -66,11 +89,13 @@ export default function Login() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               className="mt-2 w-full rounded-xl border p-4 font-normal outline-none focus:border-blue-600"
-              placeholder="Enter a demo password"
+              placeholder="Enter your password"
             />
           </label>
 
-          <button className="mt-7 w-full rounded-xl bg-blue-700 py-4 font-bold text-white">Continue</button>
+          <button disabled={loading} className="mt-7 w-full rounded-xl bg-blue-700 py-4 font-bold text-white disabled:opacity-60">
+            {loading ? 'Signing in…' : 'Continue'}
+          </button>
           <p className="mt-5 text-center text-sm text-slate-500">
             New to MetaBank? <Link to="/register" className="font-bold text-blue-700">Open an account</Link>
           </p>

@@ -1,12 +1,41 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Landmark, ShieldCheck } from 'lucide-react';
+import axios from 'axios';
 
 export default function Register() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', type: 'Personal' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', type: 'Personal', password: '' });
   const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const change = e => setForm({ ...form, [e.target.name]: e.target.value });
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await axios.post('http://localhost:4000/api/auth/register', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        type: form.type,
+        password: form.password,
+      });
+      setDone(true);
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      setError(err?.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <main className="min-h-[75vh] bg-slate-50 px-5 py-14">
@@ -33,11 +62,14 @@ export default function Register() {
 
           {done && (
             <p className="mt-5 rounded-xl bg-emerald-50 p-3 text-sm text-emerald-800">
-              Demo form completed. No account was created.
+              Account created! Please sign in.
             </p>
           )}
+          {error && (
+            <p className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>
+          )}
 
-          <form onSubmit={e => { e.preventDefault(); setDone(true); }} className="mt-7 space-y-4">
+          <form onSubmit={handleSubmit} className="mt-7 space-y-4">
             <label className="block text-sm font-bold">
               Full name
               <input required name="name" value={form.name} onChange={change} placeholder="Your full name" className="mt-2 w-full rounded-xl border p-4 font-normal" />
@@ -57,7 +89,13 @@ export default function Register() {
                 <option>Business</option>
               </select>
             </label>
-            <button className="w-full rounded-xl bg-blue-700 py-4 font-bold text-white">Continue</button>
+            <label className="block text-sm font-bold">
+              Password
+              <input required type="password" name="password" value={form.password} onChange={change} placeholder="Min 8 characters" minLength={8} className="mt-2 w-full rounded-xl border p-4 font-normal outline-none focus:border-blue-600" />
+            </label>
+            <button disabled={loading} className="w-full rounded-xl bg-blue-700 py-4 font-bold text-white disabled:opacity-60">
+              {loading ? 'Creating account…' : 'Continue'}
+            </button>
           </form>
 
           <p className="mt-5 text-center text-sm text-slate-500">
