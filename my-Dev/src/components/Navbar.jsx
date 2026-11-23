@@ -3,7 +3,14 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Landmark, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const links = [
+const publicLinks = [
+  { label: 'Home',    to: '/' },
+  { label: 'About',   to: '/about' },
+  { label: 'Support', to: '/support' },
+  { label: 'News',    to: '/news' },
+];
+
+const privateLinks = [
   { label: 'Home',        to: '/' },
   { label: 'Personal',    to: '/personal' },
   { label: 'Business',    to: '/business' },
@@ -11,8 +18,8 @@ const links = [
   { label: 'Loans',       to: '/loans' },
   { label: 'Savings',     to: '/savings' },
   { label: 'Investments', to: '/investments' },
+  { label: 'Dashboard',   to: '/dashboard' },
   { label: 'Support',     to: '/support' },
-  { label: 'News',        to: '/news' },
 ];
 
 const navCls = ({ isActive }) =>
@@ -26,6 +33,7 @@ export default function Navbar() {
   const close = () => setOpen(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const links = user ? privateLinks : publicLinks;
 
   function handleLogout() {
     logout();

@@ -30,10 +30,10 @@ function Layout() {
 
       <Routes>
         <Route path="/"             element={<Home />} />
-        <Route path="/personal"     element={<PersonalBanking />} />
-        <Route path="/business"     element={<BusinessBanking />} />
-        <Route path="/cards"        element={<Cards />} />
-        <Route path="/loans"        element={<Loans />} />
+        <Route path="/personal"     element={<ProtectedRoute><PersonalBanking /></ProtectedRoute>} />
+        <Route path="/business"     element={<ProtectedRoute><BusinessBanking /></ProtectedRoute>} />
+        <Route path="/cards"        element={<ProtectedRoute><Cards /></ProtectedRoute>} />
+        <Route path="/loans"        element={<ProtectedRoute><Loans /></ProtectedRoute>} />
         <Route path="/savings"      element={<ProtectedRoute><Savings /></ProtectedRoute>} />
         <Route path="/investments"  element={<ProtectedRoute><Investments /></ProtectedRoute>} />
         <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
