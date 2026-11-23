@@ -56,7 +56,7 @@ function ModalWrapper({ onClose, children }) {
   );
 }
 
-function SendModal({ balance, onClose, showToast }) {
+function SendModal({ balance, onClose, onConfirm }) {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
@@ -65,9 +65,8 @@ function SendModal({ balance, onClose, showToast }) {
     const amt = Number(amount);
     if (!recipient.trim()) { setError('Please enter a recipient name.'); return; }
     if (!amt || amt < 1)    { setError('Amount must be at least PKR 1.'); return; }
-    if (amt > balance)      { setError(`Amount exceeds available balance of PKR ${fmt(balance)}.`); return; }
-    showToast(amt, `PKR ${fmt(amt)} sent to ${recipient.trim()}`);
-    onClose(-amt);
+    if (amt > balance)      { setError(`Amount exceeds balance PKR ${fmt(balance)}.`); return; }
+    onConfirm(amt, recipient.trim());
   }
 
   return (
@@ -111,22 +110,18 @@ function SendModal({ balance, onClose, showToast }) {
   );
 }
 
-function BillsModal({ balance, onClose, showToast }) {
+function BillsModal({ balance, onClose, onConfirm }) {
   const [selected, setSelected] = useState({});
   const [error, setError] = useState('');
 
   const total = BILL_LIST.reduce((sum, b) => sum + (selected[b.id] ? b.amount : 0), 0);
 
-  function toggle(id) {
-    setSelected((prev) => ({ ...prev, [id]: !prev[id] }));
-    setError('');
-  }
+  function toggle(id) { setSelected(p => ({ ...p, [id]: !p[id] })); setError(''); }
 
   function handlePay() {
-    if (total === 0) { setError('Select at least one bill.'); return; }
-    if (total > balance) { setError(`Total PKR ${fmt(total)} exceeds available balance of PKR ${fmt(balance)}.`); return; }
-    showToast(-total, `Bills paid: PKR ${fmt(total)}`);
-    onClose(-total);
+    if (total === 0)      { setError('Select at least one bill.'); return; }
+    if (total > balance)  { setError(`Total PKR ${fmt(total)} exceeds balance.`); return; }
+    onConfirm(total);
   }
 
   return (
@@ -172,16 +167,15 @@ function BillsModal({ balance, onClose, showToast }) {
   );
 }
 
-function SaveModal({ balance, onClose, showToast }) {
+function SaveModal({ balance, onClose, onConfirm }) {
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
 
   function handleSave() {
     const amt = Number(amount);
-    if (!amt || amt < 1)  { setError('Amount must be at least PKR 1.'); return; }
-    if (amt > balance)    { setError(`Amount exceeds available balance of PKR ${fmt(balance)}.`); return; }
-    showToast(-amt, `PKR ${fmt(amt)} moved to savings`);
-    onClose(-amt);
+    if (!amt || amt < 1) { setError('Amount must be at least PKR 1.'); return; }
+    if (amt > balance)   { setError(`Amount exceeds balance PKR ${fmt(balance)}.`); return; }
+    onConfirm(amt);
   }
 
   return (
@@ -242,14 +236,32 @@ export default function PersonalBanking() {
     fetchUpdates();
   }, []);
 
-  function showToast(delta, message) {
+  function showToast(message) {
     setToast(message);
-    setTimeout(() => setToast(''), 2000);
+    setTimeout(() => setToast(''), 2500);
   }
 
   function closeModal(delta) {
     if (delta < 0) withdraw(-delta);
     else if (delta > 0) deposit(delta);
+    setModal(null);
+  }
+
+  function handleSend(amt, recipient) {
+    withdraw(amt);
+    showToast(`PKR ${amt.toLocaleString('en-PK')} sent to ${recipient}`);
+    setModal(null);
+  }
+
+  function handleBills(total) {
+    withdraw(total);
+    showToast(`Bills paid: PKR ${total.toLocaleString('en-PK')}`);
+    setModal(null);
+  }
+
+  function handleSave(amt) {
+    withdraw(amt);
+    showToast(`PKR ${amt.toLocaleString('en-PK')} moved to savings`);
     setModal(null);
   }
 
@@ -266,9 +278,9 @@ export default function PersonalBanking() {
         <AccountCard balance={balance} setModal={setModal} />
       </PageHero>
 
-      {modal === 'send'  && <SendModal  balance={balance} onClose={closeModal} showToast={showToast} />}
-      {modal === 'bills' && <BillsModal balance={balance} onClose={closeModal} showToast={showToast} />}
-      {modal === 'save'  && <SaveModal  balance={balance} onClose={closeModal} showToast={showToast} />}
+      {modal === 'send'  && <SendModal  balance={balance} onClose={() => setModal(null)} onConfirm={handleSend} />}
+      {modal === 'bills' && <BillsModal balance={balance} onClose={() => setModal(null)} onConfirm={handleBills} />}
+      {modal === 'save'  && <SaveModal  balance={balance} onClose={() => setModal(null)} onConfirm={handleSave} />}
 
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 rounded-2xl bg-emerald-500 px-6 py-4 font-bold text-white shadow-2xl">

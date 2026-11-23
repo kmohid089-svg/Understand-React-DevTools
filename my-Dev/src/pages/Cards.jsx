@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { CreditCard, LockKeyhole, Plane, ShoppingBag } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
+import { useAuth } from '../context/AuthContext';
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -68,6 +69,7 @@ function FreezeControl({ frozen, setFrozen }) {
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function Cards() {
+  const { user } = useAuth();
   const [frozen, setFrozen] = useState(false);
   const [tab, setTab] = useState('debit');
 
@@ -98,7 +100,7 @@ export default function Cards() {
         title="A card experience with"
         accent="more control."
         description="Compare sample card tiers, review card benefits and try the interactive freeze control. All card details and actions on this page are demonstrations."
-        action={{ to: '/register', label: 'Get started' }}
+        action={user ? { to: '/dashboard', label: 'Go to Dashboard' } : { to: '/register', label: 'Get started' }}
       >
         <HeroCard frozen={frozen} tab={tab} />
       </PageHero>

@@ -4,6 +4,7 @@ import { Landmark, ShieldCheck, Smartphone, Globe2, ArrowUpRight, Wallet, Credit
 import { Link } from 'react-router-dom';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
 import { useAccount } from '../context/AccountContext';
+import { useAuth } from '../context/AuthContext';
 
 function HeroCard({ balance }) {
   return (
@@ -38,6 +39,7 @@ function HeroCard({ balance }) {
 
 export default function Home() {
   const { balance } = useAccount();
+  const { user } = useAuth();
   const [rates, setRates] = useState(null);
   const [ratesLoading, setRatesLoading] = useState(true);
   const [ratesError, setRatesError] = useState(null);
@@ -65,8 +67,8 @@ export default function Home() {
         title="Banking made"
         accent="simple & secure."
         description="Open your MetaBank account in minutes. Zero hidden fees, real-time transfers, and bank-grade security — all from your phone or browser."
-        action={{to: '/register', label: 'Open Account'}}
-        secondary={{to: '/login', label: 'Sign In'}}
+        action={user ? { to: '/dashboard', label: 'Go to Dashboard' } : { to: '/register', label: 'Open Account' }}
+        secondary={user ? { to: '/personal', label: 'Personal Banking' } : { to: '/login', label: 'Sign In' }}
       >
         <HeroCard balance={balance} />
       </PageHero>
