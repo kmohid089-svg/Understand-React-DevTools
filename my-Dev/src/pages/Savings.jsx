@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Target, CalendarDays, TrendingUp } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
+import { useAccount } from '../context/AccountContext';
 
-function SavingsCard({ saved, setSaved, goal }) {
-  const pct = Math.min(100, Math.round((saved / goal) * 100));
+function SavingsCard({ balance, onAdd, goal }) {
+  const pct = Math.min(100, Math.round((balance / goal) * 100));
   return (
     <div className="rounded-3xl bg-slate-950 p-7 text-white">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-slate-400">My travel fund</p>
-          <p className="mt-2 text-3xl font-black">PKR {saved.toLocaleString('en-PK')}</p>
+          <p className="mt-2 text-3xl font-black">PKR {balance.toLocaleString('en-PK')}</p>
         </div>
         <Target className="text-blue-300" size={34} />
       </div>
@@ -22,11 +23,8 @@ function SavingsCard({ saved, setSaved, goal }) {
         <span>Goal PKR {goal.toLocaleString('en-PK')}</span>
       </div>
       <div className="mt-6 flex gap-2">
-        <button onClick={() => setSaved(v => Math.min(goal, v + 10000))} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold">
+        <button onClick={onAdd} className="rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold">
           Add PKR 10,000
-        </button>
-        <button onClick={() => setSaved(0)} className="rounded-xl bg-white/10 px-4 py-3 text-sm font-bold">
-          Reset demo
         </button>
       </div>
     </div>
@@ -34,8 +32,8 @@ function SavingsCard({ saved, setSaved, goal }) {
 }
 
 export default function Savings() {
-  const [goal, setGoal]   = useState(500000);
-  const [saved, setSaved] = useState(175000);
+  const [goal, setGoal] = useState(500000);
+  const { balance, deposit } = useAccount();
 
   const [todos, setTodos] = useState([]);
   const [todosLoading, setTodosLoading] = useState(true);
@@ -66,7 +64,7 @@ export default function Savings() {
         description="Create a savings target, track contributions and see how close you are to the milestone you care about."
         action={{ to: '/dashboard', label: 'View dashboard' }}
       >
-        <SavingsCard saved={saved} setSaved={setSaved} goal={goal} />
+        <SavingsCard balance={balance} onAdd={() => deposit(10000)} goal={goal} />
       </PageHero>
 
       <section className="mx-auto max-w-7xl px-5 py-16">

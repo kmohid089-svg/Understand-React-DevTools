@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
+import { AccountProvider } from './context/AccountContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -36,17 +37,17 @@ function Layout() {
         <Route path="/loans"        element={<ProtectedRoute><Loans /></ProtectedRoute>} />
         <Route path="/savings"      element={<ProtectedRoute><Savings /></ProtectedRoute>} />
         <Route path="/investments"  element={<ProtectedRoute><Investments /></ProtectedRoute>} />
-        <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
-        <Route path="/profile"      element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/admin"        element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/support"      element={<Support />} />
-        <Route path="/contact"      element={<Contact />} />
-        <Route path="/about"        element={<About />} />
-        <Route path="/login"        element={<Login />} />
-        <Route path="/register"     element={<Register />} />
-        <Route path="/news"         element={<News />} />
-        <Route path="*"             element={<Navigate to="/" replace />} />
+        <Route path="/dashboard"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/transactions"element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
+        <Route path="/profile"element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/admin"element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+        <Route path="/support"element={<Support />} />
+        <Route path="/contact"element={<Contact />} />
+        <Route path="/about"element={<About />} />
+        <Route path="/login"element={<Login />} />
+        <Route path="/register"element={<Register />} />
+        <Route path="/news" element={<News />} />
+        <Route path="*"element={<Navigate to="/" replace />} />
       </Routes>
 
       <Footer />
@@ -58,7 +59,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Layout />
+        <AccountProvider>
+          <Layout />
+        </AccountProvider>
       </AuthProvider>
     </BrowserRouter>
   );

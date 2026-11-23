@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Wallet, ArrowUpRight, ArrowDownLeft, Eye, EyeOff, Plus, Send, Download, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useAccount } from '../context/AccountContext';
 
 const initialRows = [
   ['Salary credit',       'Income',   '+ PKR 125,000', 'Today'],
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [visible, setVisible] = useState(true);
   const rows = initialRows;
   const { user } = useAuth();
+  const { balance, deposit, withdraw } = useAccount();
 
   const [holder, setHolder] = useState(null);
   const [holderLoading, setHolderLoading] = useState(true);
@@ -64,7 +66,7 @@ export default function Dashboard() {
             <div className="flex justify-between">
               <div>
                 <p className="text-sm text-blue-100">Total available balance</p>
-                <p className="mt-3 text-4xl font-black">{visible ? 'PKR 2,450,800' : '••••••••'}</p>
+                <p className="mt-3 text-4xl font-black">{visible ? `PKR ${balance.toLocaleString('en-PK')}` : '••••••••'}</p>
               </div>
               <button onClick={() => setVisible(!visible)} className="h-fit rounded-xl bg-white/15 p-3">
                 {visible ? <Eye /> : <EyeOff />}
@@ -74,7 +76,11 @@ export default function Dashboard() {
               {quickActions.map(([Icon, label]) => (
                 <button
                   key={label}
-                  onClick={() => alert('This is a demo banking action. No money is moved.')}
+                  onClick={() => {
+                    if (label === 'Add funds') { deposit(50000); }
+                    else if (label === 'Transfer') { withdraw(10000); }
+                    else { alert('This is a demo banking action. No money is moved.'); }
+                  }}
                   className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-blue-800"
                 >
                   <Icon size={17} /> {label}

@@ -2,10 +2,11 @@ import { useMemo, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Home, Car, GraduationCap, BriefcaseBusiness } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
+import { useAccount } from '../context/AccountContext';
 
 const fmt = n => new Intl.NumberFormat('en-PK', { maximumFractionDigits: 0 }).format(n);
 
-function Calculator() {
+function Calculator({ onTakeLoan }) {
   const [amount, setAmount] = useState(1000000);
   const [rate,   setRate]   = useState(18);
   const [years,  setYears]  = useState(3);
@@ -34,11 +35,20 @@ function Calculator() {
           <input type="range" min="1" max="10" value={years} onChange={e => setYears(+e.target.value)} className="mt-3 w-full accent-blue-700" />
         </label>
       </div>
+      <button
+        onClick={() => onTakeLoan(amount, Math.round(monthly))}
+        className="mt-6 w-full rounded-2xl bg-blue-700 py-3 font-bold text-white hover:bg-blue-800 transition-colors"
+      >
+        Take This Loan
+      </button>
     </div>
   );
 }
 
 export default function Loans() {
+  const { loan, loanMonthly, takeLoan, repayLoan } = useAccount();
+  const [toast, setToast] = useState('');
+
   const [countries, setCountries] = useState([]);
   const [countriesLoading, setCountriesLoading] = useState(true);
   const [countriesError, setCountriesError] = useState(null);
@@ -59,6 +69,26 @@ export default function Loans() {
     fetchCountries();
   }, []);
 
+  function showToast(message) {
+    setToast(message);
+    setTimeout(() => setToast(''), 2500);
+  }
+
+  function handleTakeLoan(amount, monthly) {
+    takeLoan(amount, monthly);
+    showToast(`PKR ${fmt(amount)} added to your account`);
+  }
+
+  function handleMonthlyPayment() {
+    repayLoan(loanMonthly);
+    showToast('Payment made');
+  }
+
+  function handleRepayFull() {
+    repayLoan(loan);
+    showToast('Loan fully repaid!');
+  }
+
   return (
     <>
       <PageHero
@@ -68,8 +98,52 @@ export default function Loans() {
         description="Explore illustrative financing categories and estimate a monthly repayment using the demo calculator below."
         action={{ to: '/support', label: 'Ask a question' }}
       >
-        <Calculator />
+        <Calculator onTakeLoan={handleTakeLoan} />
       </PageHero>
+
+      {/* Your Loan section */}
+      <section className="mx-auto max-w-7xl px-5 py-10">
+        <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+          <h2 className="text-2xl font-black text-slate-950">Your Loan</h2>
+
+          {loan === 0 ? (
+            <p className="mt-4 text-slate-500">No active loan. Use the calculator above to take a loan.</p>
+          ) : (
+            <div className="mt-5 space-y-5">
+              <div className="flex flex-wrap gap-6">
+                <div className="rounded-2xl bg-slate-50 p-5">
+                  <p className="text-sm text-slate-500">Outstanding balance</p>
+                  <p className="mt-1 text-2xl font-black text-slate-950">PKR {fmt(loan)}</p>
+                </div>
+                <div className="rounded-2xl bg-slate-50 p-5">
+                  <p className="text-sm text-slate-500">Monthly payment</p>
+                  <p className="mt-1 text-2xl font-black text-slate-950">PKR {fmt(loanMonthly)}</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={handleMonthlyPayment}
+                  className="rounded-2xl bg-blue-700 px-6 py-3 font-bold text-white hover:bg-blue-800 transition-colors"
+                >
+                  Make Monthly Payment
+                </button>
+                <button
+                  onClick={handleRepayFull}
+                  className="rounded-2xl bg-emerald-600 px-6 py-3 font-bold text-white hover:bg-emerald-700 transition-colors"
+                >
+                  Repay Full Loan
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 rounded-2xl bg-emerald-500 px-6 py-4 font-bold text-white shadow-2xl">
+          {toast}
+        </div>
+      )}
 
       <section className="mx-auto max-w-7xl px-5 py-16">
         <SectionTitle

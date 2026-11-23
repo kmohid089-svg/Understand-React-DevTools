@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Building2, Users, Receipt, ChartNoAxesCombined, CreditCard, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
+import { useAccount } from '../context/AccountContext';
 
 function HeroPanel() {
+  const { balance } = useAccount();
   return (
     <div className="grid grid-cols-2 gap-4">
       <div className="col-span-2 rounded-3xl bg-white p-7 text-slate-950">
         <p className="text-sm font-bold text-slate-500">Business cash position</p>
-        <p className="mt-2 text-4xl font-black">PKR 8.72M</p>
+        <p className="mt-2 text-4xl font-black">PKR {balance.toLocaleString('en-PK')}</p>
         <div className="mt-7 h-3 overflow-hidden rounded-full bg-slate-100">
           <div className="h-full w-3/4 rounded-full bg-blue-600" />
         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Wallet, PiggyBank, ArrowLeftRight, Smartphone, ReceiptText, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
+import { useAccount } from '../context/AccountContext';
 
 const quickActions = [
   ['Send', '↗', 'send'],
@@ -218,8 +219,8 @@ function SaveModal({ balance, onClose, showToast }) {
 
 export default function PersonalBanking() {
   const [modal, setModal]     = useState(null);
-  const [balance, setBalance] = useState(485250);
   const [toast, setToast]     = useState('');
+  const { balance, deposit, withdraw } = useAccount();
 
   const [updates, setUpdates]               = useState([]);
   const [updatesLoading, setUpdatesLoading] = useState(true);
@@ -247,7 +248,8 @@ export default function PersonalBanking() {
   }
 
   function closeModal(delta) {
-    if (delta !== 0) setBalance((prev) => prev + delta);
+    if (delta < 0) withdraw(-delta);
+    else if (delta > 0) deposit(delta);
     setModal(null);
   }
 
