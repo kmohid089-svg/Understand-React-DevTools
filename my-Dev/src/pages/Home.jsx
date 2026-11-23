@@ -3,8 +3,9 @@ import axios from 'axios';
 import { Landmark, ShieldCheck, Smartphone, Globe2, ArrowUpRight, Wallet, CreditCard, ChartNoAxesCombined, BadgeCheck, Clock, Lock, User, Briefcase, TrendingUp, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHero, SectionTitle, FeatureCard, CTA, Stat } from '../components/Ui';
+import { useAccount } from '../context/AccountContext';
 
-function HeroCard() {
+function HeroCard({ balance }) {
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-blue-500/20 to-cyan-300/5 p-5 shadow-2xl">
       <div className="rounded-[1.5rem] bg-white p-6 text-slate-900">
@@ -13,7 +14,7 @@ function HeroCard() {
           <Landmark className="text-blue-700" />
         </div>
         <p className="mt-8 text-sm text-slate-500">Available balance</p>
-        <p className="mt-1 text-4xl font-black">PKR 2,450,800</p>
+        <p className="mt-1 text-4xl font-black">PKR {balance.toLocaleString('en-PK')}</p>
         <div className="mt-8 flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-500">••••  ••••  ••••  2048</span>
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">Active</span>
@@ -36,6 +37,7 @@ function HeroCard() {
 }
 
 export default function Home() {
+  const { balance } = useAccount();
   const [rates, setRates] = useState(null);
   const [ratesLoading, setRatesLoading] = useState(true);
   const [ratesError, setRatesError] = useState(null);
@@ -66,7 +68,7 @@ export default function Home() {
         action={{to: '/register', label: 'Open Account'}}
         secondary={{to: '/login', label: 'Sign In'}}
       >
-        <HeroCard />
+        <HeroCard balance={balance} />
       </PageHero>
 
       {/* 2. Why MetaBank */}
