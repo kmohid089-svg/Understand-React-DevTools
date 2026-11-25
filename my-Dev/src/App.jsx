@@ -6,7 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-import Home            from './pages/Home';
+import Home from './pages/Home';
 import PersonalBanking from './pages/PersonalBanking';
 import BusinessBanking from './pages/BusinessBanking';
 import Cards from './pages/Cards';

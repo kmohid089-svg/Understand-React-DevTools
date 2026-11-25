@@ -33,25 +33,24 @@ function HeroPanel() {
 }
 
 export default function BusinessBanking() {
-  const [news, setNews] = useState([]);
+  const [news, setNews]           = useState([]);
   const [newsLoading, setNewsLoading] = useState(true);
   const [newsError, setNewsError] = useState(null);
 
-  useEffect(() => {
-    async function fetchNews() {
-      try {
-        const { data } = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts?_limit=3'
-        );
-        setNews(data);
-      } catch (err) {
-        setNewsError('Could not load business news.');
-      } finally {
-        setNewsLoading(false);
-      }
+  async function fetchNews() {
+    setNewsLoading(true);
+    setNewsError(null);
+    try {
+      const { data } = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=3');
+      setNews(data);
+    } catch {
+      setNewsError('Could not load business news.');
+    } finally {
+      setNewsLoading(false);
     }
-    fetchNews();
-  }, []);
+  }
+
+  useEffect(() => { fetchNews(); }, []);
 
   return (
     <>
@@ -127,7 +126,14 @@ export default function BusinessBanking() {
       <section className="mx-auto max-w-7xl px-5 py-14">
         <SectionTitle eyebrow="Business news" title="Latest business insights" description="Demo articles from JSONPlaceholder API." />
         {newsLoading && <p className="text-slate-500">Loading news…</p>}
-        {newsError && <p className="text-red-500">{newsError}</p>}
+        {newsError && (
+          <div className="flex items-center gap-4">
+            <p className="text-red-500">{newsError}</p>
+            <button onClick={fetchNews} className="rounded-xl bg-blue-700 px-4 py-2 text-sm font-bold text-white hover:bg-blue-800">
+              Retry
+            </button>
+          </div>
+        )}
         {news.length > 0 && (
           <div className="grid gap-5 md:grid-cols-3">
             {news.map((post) => (
