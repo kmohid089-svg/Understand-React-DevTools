@@ -20,6 +20,7 @@ const privateLinks = [
   { label: 'Investments', to: '/investments' },
   { label: 'Dashboard',   to: '/dashboard' },
   { label: 'Support',     to: '/support' },
+  { label: 'Blog',        to: '/blog' },
 ];
 
 const navCls = ({ isActive }) =>

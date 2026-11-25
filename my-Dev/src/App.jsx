@@ -23,6 +23,7 @@ import About from './pages/About';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import News from './pages/News';
+import Blog from './pages/Blog';
 
 function Layout() {
   return (
@@ -47,6 +48,7 @@ function Layout() {
         <Route path="/login"element={<Login />} />
         <Route path="/register"element={<Register />} />
         <Route path="/news" element={<News />} />
+        <Route path="/blog" element={<ProtectedRoute><Blog /></ProtectedRoute>} />
         <Route path="*"element={<Navigate to="/" replace />} />
       </Routes>
 
