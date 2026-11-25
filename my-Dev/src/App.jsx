@@ -9,20 +9,20 @@ import Footer from './components/Footer';
 import Home            from './pages/Home';
 import PersonalBanking from './pages/PersonalBanking';
 import BusinessBanking from './pages/BusinessBanking';
-import Cards           from './pages/Cards';
-import Loans           from './pages/Loans';
-import Savings         from './pages/Savings';
-import Investments     from './pages/Investments';
-import Dashboard       from './pages/Dashboard';
-import Transactions    from './pages/Transactions';
-import Profile         from './pages/Profile';
-import Admin           from './pages/Admin';
-import Support         from './pages/Support';
-import Contact         from './pages/Contact';
-import About           from './pages/About';
-import Login           from './pages/Login';
-import Register        from './pages/Register';
-import News            from './pages/News';
+import Cards from './pages/Cards';
+import Loans from './pages/Loans';
+import Savings from './pages/Savings';
+import Investments from './pages/Investments';
+import Dashboard from './pages/Dashboard';
+import Transactions from './pages/Transactions';
+import Profile from './pages/Profile';
+import Admin from './pages/Admin';
+import Support from './pages/Support';
+import Contact from './pages/Contact';
+import About from './pages/About';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import News from './pages/News';
 
 function Layout() {
   return (
@@ -30,13 +30,13 @@ function Layout() {
       <Navbar />
 
       <Routes>
-        <Route path="/"             element={<Home />} />
-        <Route path="/personal"     element={<ProtectedRoute><PersonalBanking /></ProtectedRoute>} />
-        <Route path="/business"     element={<ProtectedRoute><BusinessBanking /></ProtectedRoute>} />
-        <Route path="/cards"        element={<ProtectedRoute><Cards /></ProtectedRoute>} />
-        <Route path="/loans"        element={<ProtectedRoute><Loans /></ProtectedRoute>} />
-        <Route path="/savings"      element={<ProtectedRoute><Savings /></ProtectedRoute>} />
-        <Route path="/investments"  element={<ProtectedRoute><Investments /></ProtectedRoute>} />
+        <Route path="/"element={<Home />} />
+        <Route path="/personal"element={<ProtectedRoute><PersonalBanking /></ProtectedRoute>} />
+        <Route path="/business"element={<ProtectedRoute><BusinessBanking /></ProtectedRoute>} />
+        <Route path="/cards"element={<ProtectedRoute><Cards /></ProtectedRoute>} />
+        <Route path="/loans"element={<ProtectedRoute><Loans /></ProtectedRoute>} />
+        <Route path="/savings"element={<ProtectedRoute><Savings /> <div>hi kesa ho </div></ProtectedRoute>} />
+        <Route path="/investments"element={<ProtectedRoute><Investments /></ProtectedRoute>} />
         <Route path="/dashboard"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/transactions"element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
         <Route path="/profile"element={<ProtectedRoute><Profile /></ProtectedRoute>} />

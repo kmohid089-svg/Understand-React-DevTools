@@ -25,8 +25,8 @@ function AccountCard({ balance, setModal }) {
   return (
     <div className="rounded-3xl bg-slate-950 p-7 text-white shadow-2xl">
       <p className="text-sm text-slate-400">Everyday account</p>
-      <p className="mt-3 text-4xl font-black">PKR {fmt(balance)}</p>
       <p className="mt-2 text-sm text-emerald-300">Illustrative available balance</p>
+      <p className="mt-3 text-4xl font-black">PKR {fmt(balance)}</p>
       <div className="mt-8 grid grid-cols-3 gap-3 text-center">
         {quickActions.map(([label, icon, key]) => (
           <button
