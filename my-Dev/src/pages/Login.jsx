@@ -27,14 +27,13 @@ export default function Login() {
       localStorage.setItem('mb_token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
+      // Server offline — fall back to demo mode
       if (!err.response) {
-        // Server offline — fall back to demo mode
         if (password.length >= 6) {
-          setError('Server offline — using demo mode');
           login({ name: 'Demo User', email, accountNumber: 'MB-DEMO-0000', balance: 0 });
-          setTimeout(() => navigate('/dashboard'), 1200);
+          navigate('/dashboard');
         } else {
-          setError('Server offline — using demo mode. Password must be at least 6 characters.');
+          setError('Password must be at least 6 characters.');
         }
       } else {
         setError(err.response?.data?.message || 'Incorrect email or password');
