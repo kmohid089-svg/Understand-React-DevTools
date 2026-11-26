@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Wallet, PiggyBank, ArrowLeftRight, Smartphone, ReceiptText, ShieldCheck } from 'lucide-react';
 import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 import { useAccount } from '../context/AccountContext';
+import { useAuth } from '../context/AuthContext';
 
 const quickActions = [
   ['Send', '↗', 'send'],
@@ -214,7 +215,8 @@ function SaveModal({ balance, onClose, onConfirm }) {
 export default function PersonalBanking() {
   const [modal, setModal]     = useState(null);
   const [toast, setToast]     = useState('');
-  const { balance, deposit, withdraw } = useAccount();
+  const { balance, withdraw, deposit } = useAccount();
+  const { user } = useAuth();
 
   const [updates, setUpdates]               = useState([]);
   const [updatesLoading, setUpdatesLoading] = useState(true);
@@ -272,7 +274,7 @@ export default function PersonalBanking() {
         title="Personal banking built around"
         accent="your priorities."
         description="A practical home for everyday spending, incoming payments, bill planning and the goals that matter to you."
-        action={{ to: '/register', label: 'Explore an account' }}
+        action={user ? { to: '/dashboard', label: 'Go to Dashboard' } : { to: '/register', label: 'Explore an account' }}
         secondary={{ to: '/dashboard', label: 'View demo dashboard' }}
       >
         <AccountCard balance={balance} setModal={setModal} />

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { Landmark, ShieldCheck } from 'lucide-react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', type: 'Personal', password: '' });
@@ -9,6 +10,10 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Already logged in → dashboard pe bhejo
+  if (user) return <Navigate to="/dashboard" replace />;
 
   const change = e => setForm({ ...form, [e.target.name]: e.target.value });
 
