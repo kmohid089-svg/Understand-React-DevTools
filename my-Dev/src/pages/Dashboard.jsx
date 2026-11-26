@@ -26,6 +26,26 @@ export default function Dashboard() {
   const { user } = useAuth();
   const { balance, deposit, withdraw } = useAccount();
 
+  function downloadStatement() {
+    const lines = [
+      'MetaBank Account Statement',
+      `Account Holder: ${user?.name || 'Demo User'}`,
+      `Date: ${new Date().toLocaleDateString('en-PK')}`,
+      `Balance: PKR ${balance.toLocaleString('en-PK')}`,
+      '',
+      'Date,Description,Category,Amount',
+      ...initialRows.map(([desc, cat, amt, date]) => `${date},${desc},${cat},${amt}`),
+    ];
+    const csv = lines.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `metabank-statement-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   const [holder, setHolder] = useState(null);
   const [holderLoading, setHolderLoading] = useState(true);
   const [holderError, setHolderError] = useState(null);
@@ -79,7 +99,7 @@ export default function Dashboard() {
                   onClick={() => {
                     if (label === 'Add funds') { deposit(50000); }
                     else if (label === 'Transfer') { withdraw(10000); }
-                    else { alert('This is a demo banking action. No money is moved.'); }
+                    else { downloadStatement(); }
                   }}
                   className="flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-blue-800"
                 >
