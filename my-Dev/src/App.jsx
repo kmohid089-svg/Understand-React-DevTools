@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
 import { AccountProvider } from './context/AccountContext';
@@ -29,9 +29,12 @@ import News from './pages/News';
 import Blog from './pages/Blog';
 
 function Layout() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin-secret-panel');
+
   return (
     <>
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
 
       <Routes>
         <Route path="/"element={<Home />} />
