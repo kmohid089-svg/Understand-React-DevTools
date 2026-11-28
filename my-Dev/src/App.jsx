@@ -41,7 +41,7 @@ function Layout() {
         <Route path="/dashboard"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/transactions"element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
         <Route path="/profile"element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/admin"element={<Admin />} />
+        <Route path="/admin-secret-panel"element={<Admin />} />
         <Route path="/support"element={<Support />} />
         <Route path="/contact"element={<Contact />} />
         <Route path="/about"element={<About />} />

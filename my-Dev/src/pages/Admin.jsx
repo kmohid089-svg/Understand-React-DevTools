@@ -18,11 +18,11 @@ function AdminLogin({ onLogin }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (username === 'admin' && password === 'apex2024') {
-      localStorage.setItem('apex_admin', 'true');
+    if (username === 'apexadmin' && password === 'Ap3x2024$B@nk') {
+      localStorage.setItem('apex_admin_secret', 'true');
       onLogin();
     } else {
-      setError('Invalid admin credentials');
+      setError('Invalid secret credentials');
     }
   }
 
@@ -289,7 +289,7 @@ function AdminDashboard({ onLogout }) {
 
 export default function Admin() {
   const [isAdmin, setIsAdmin] = useState(
-    localStorage.getItem('apex_admin') === 'true'
+    localStorage.getItem('apex_admin_secret') === 'true'
   );
 
   function handleLogin() {
@@ -297,7 +297,7 @@ export default function Admin() {
   }
 
   function handleLogout() {
-    localStorage.removeItem('apex_admin');
+    localStorage.removeItem('apex_admin_secret');
     setIsAdmin(false);
   }
 
