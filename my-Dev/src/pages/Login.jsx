@@ -50,12 +50,12 @@ export default function Login() {
     <main className="grid min-h-[75vh] bg-slate-50 lg:grid-cols-2">
       <div className="hidden flex-col justify-between bg-slate-950 p-12 text-white lg:flex">
         <Link to="/" className="flex items-center gap-3 text-2xl font-black">
-          <Landmark className="text-blue-400" />MetaBank
+          <Landmark className="text-blue-400" />Apex Bank
         </Link>
         <div>
           <p className="text-sm font-bold uppercase tracking-widest text-blue-300">Your finances, in focus</p>
           <h1 className="mt-5 max-w-lg text-5xl font-black leading-tight">Welcome to a clearer banking experience.</h1>
-          <p className="mt-5 max-w-md leading-8 text-slate-300">Sign-in screen concept for the MetaBank demo website.</p>
+          <p className="mt-5 max-w-md leading-8 text-slate-300">Sign-in screen concept for the Apex Bank demo website.</p>
         </div>
         <p className="text-xs text-slate-500">Fictional banking demo — no real account access.</p>
       </div>
@@ -64,11 +64,11 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
           <div className="mb-7 flex items-center gap-3 lg:hidden">
             <Landmark className="text-blue-700" />
-            <span className="text-2xl font-black">MetaBank</span>
+            <span className="text-2xl font-black">Apex Bank</span>
           </div>
           <p className="text-sm font-bold uppercase tracking-widest text-blue-700">Secure access</p>
           <h2 className="mt-2 text-3xl font-black text-slate-950">Sign in</h2>
-          <p className="mt-2 text-slate-500">Enter your MetaBank credentials to continue.</p>
+          <p className="mt-2 text-slate-500">Enter your Apex Bank credentials to continue.</p>
 
           {error && <p className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
 
@@ -99,7 +99,7 @@ export default function Login() {
             {loading ? 'Signing in…' : 'Continue'}
           </button>
           <p className="mt-5 text-center text-sm text-slate-500">
-            New to MetaBank? <Link to="/register" className="font-bold text-blue-700">Open an account</Link>
+            New to Apex Bank? <Link to="/register" className="font-bold text-blue-700">Open an account</Link>
           </p>
           <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400">
             <ShieldCheck size={15} /> Demo form only. Do not use a real password.

@@ -27,7 +27,7 @@ export default function Footer() {
       a: [
         ['Support centre', '/support'],
         ['Contact us', '/contact'],
-        ['About MetaBank', '/about'],
+        ['About Apex Bank', '/about'],
         ['Account access', '/login'],
       ],
     },
@@ -46,7 +46,7 @@ export default function Footer() {
             <span className="rounded-xl bg-blue-600 p-2">
               <Landmark size={24} />
             </span>
-            MetaBank
+            Apex Bank
           </Link>
 
           <p className="max-w-sm leading-7 text-slate-400">
@@ -94,7 +94,7 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-5 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
 
           <span>
-            © {new Date().getFullYear()} MetaBank. Demo website concept.
+            © {new Date().getFullYear()} Apex Bank. Demo website concept.
           </span>
 
           <span className="flex items-center gap-2">

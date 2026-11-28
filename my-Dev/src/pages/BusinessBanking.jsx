@@ -117,7 +117,7 @@ export default function BusinessBanking() {
 
       <CTA
         title="Give your business a clearer financial picture"
-        description="Contact the MetaBank demo team to explore a business banking workflow."
+        description="Contact the Apex Bank demo team to explore a business banking workflow."
         to="/contact"
         label="Contact business team"
       />

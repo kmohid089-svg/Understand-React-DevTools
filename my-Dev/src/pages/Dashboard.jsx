@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   function downloadStatement() {
     const lines = [
-      'MetaBank Account Statement',
+      'Apex Bank Account Statement',
       `Account Holder: ${user?.name || 'Demo User'}`,
       `Date: ${new Date().toLocaleDateString('en-PK')}`,
       `Balance: PKR ${balance.toLocaleString('en-PK')}`,
@@ -41,7 +41,7 @@ export default function Dashboard() {
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;
-    a.download = `metabank-statement-${new Date().toISOString().slice(0,10)}.csv`;
+    a.download = `apexbank-statement-${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }

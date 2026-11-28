@@ -48,7 +48,7 @@ export default function Navbar() {
 
         <Link to="/" className="flex items-center gap-3" onClick={close}>
           <span className="rounded-2xl bg-blue-700 p-2.5 text-white"><Landmark size={23} /></span>
-          <span className="text-2xl font-black tracking-tight text-slate-950">Meta<span className="text-blue-700">Bank</span></span>
+          <span className="text-2xl font-black tracking-tight text-slate-950">Apex <span className="text-blue-700">Bank</span></span>
         </Link>
 
         <nav className="hidden items-center gap-5 xl:flex">

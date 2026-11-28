@@ -55,7 +55,7 @@ export default function Register() {
         {/* Left panel */}
         <div className="bg-gradient-to-br from-blue-900 to-blue-600 p-9 text-white md:p-12">
           <Landmark size={36} />
-          <p className="mt-12 text-sm font-bold uppercase tracking-widest text-blue-200">Start with MetaBank</p>
+          <p className="mt-12 text-sm font-bold uppercase tracking-widest text-blue-200">Start with Apex Bank</p>
           <h1 className="mt-4 text-4xl font-black">A better view of your money starts here.</h1>
           <p className="mt-5 leading-8 text-blue-100">Explore the registration journey for this fictional banking website concept.</p>
           <div className="mt-10 rounded-2xl bg-white/10 p-5">

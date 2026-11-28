@@ -5,7 +5,7 @@ import { PageHero, SectionTitle, FeatureCard, CTA } from '../components/Ui';
 
 const faqs = [
   [
-    'Is MetaBank a real bank?',
+    'Is Apex Bank a real bank?',
     'No. This website is a demonstration banking interface. It is not a licensed bank and does not provide real financial services.',
   ],
   [
@@ -70,9 +70,9 @@ export default function Support() {
         eyebrow="We're here to help"
         title="Answers when you"
         accent="need them."
-        description="Find guidance about the MetaBank demo experience, account screens and the features shown across the website."
+        description="Find guidance about the Apex Bank demo experience, account screens and the features shown across the website."
         action={{ to: '/contact', label: 'Contact support' }}
-        secondary={{ to: '/about', label: 'About MetaBank' }}
+        secondary={{ to: '/about', label: 'About Apex Bank' }}
       >
         <HeroCard />
       </PageHero>

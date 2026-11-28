@@ -11,7 +11,7 @@ function HeroCard({ balance }) {
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-blue-500/20 to-cyan-300/5 p-5 shadow-2xl">
       <div className="rounded-[1.5rem] bg-white p-6 text-slate-900">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-bold text-slate-500">MetaBank Platinum</span>
+          <span className="text-sm font-bold text-slate-500">Apex Bank Platinum</span>
           <Landmark className="text-blue-700" />
         </div>
         <p className="mt-8 text-sm text-slate-500">Available balance</p>
@@ -66,7 +66,7 @@ export default function Home() {
         eyebrow="Pakistan's Digital Bank"
         title="Banking made"
         accent="simple & secure."
-        description="Open your MetaBank account in minutes. Zero hidden fees, real-time transfers, and bank-grade security — all from your phone or browser."
+        description="Open your Apex Bank account in minutes. Zero hidden fees, real-time transfers, and bank-grade security — all from your phone or browser."
         action={user ? { to: '/dashboard', label: 'Go to Dashboard' } : { to: '/register', label: 'Open Account' }}
         secondary={user ? { to: '/personal', label: 'Personal Banking' } : { to: '/login', label: 'Sign In' }}
       >
@@ -76,7 +76,7 @@ export default function Home() {
       {/* 2. Why MetaBank */}
       <section className="mx-auto max-w-7xl px-5 py-16">
         <SectionTitle
-          eyebrow="Why MetaBank"
+          eyebrow="Why Apex Bank"
           title="Everything you need, nothing you don't"
           description="Built from the ground up for Pakistanis who want a modern banking experience."
         />
@@ -99,7 +99,7 @@ export default function Home() {
             {[
               { icon: User,       title: 'Personal Account',  desc: 'Everyday banking with zero fees, free transfers and instant notifications.' },
               { icon: Briefcase,  title: 'Business Account',  desc: 'Dedicated IBAN, bulk payments and cash-flow dashboard for your business.' },
-              { icon: CreditCard, title: 'MetaCard',          desc: 'Virtual and physical debit card with real-time spend controls.' },
+              { icon: CreditCard, title: 'Apex Card',          desc: 'Virtual and physical debit card with real-time spend controls.' },
               { icon: TrendingUp, title: 'Investments',       desc: 'Grow your savings with mutual funds and government bonds from PKR 1,000.' },
             ].map(p => (
               <article key={p.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
@@ -157,9 +157,9 @@ export default function Home() {
         <SectionTitle eyebrow="Customer stories" title="Trusted by thousands across Pakistan" center />
         <div className="grid gap-5 md:grid-cols-3">
           {[
-            { quote: 'MetaBank made my salary transfers instant. I no longer wait two days for funds to clear.', name: 'Zara Ahmed', city: 'Karachi' },
+            { quote: 'Apex Bank made my salary transfers instant. I no longer wait two days for funds to clear.', name: 'Zara Ahmed', city: 'Karachi' },
             { quote: 'Setting up my business account took five minutes. The dashboard is incredibly clear.', name: 'Hamza Raza', city: 'Lahore' },
-            { quote: 'The MetaCard works everywhere. Zero fees abroad saved me a lot on my last trip.', name: 'Ayesha Malik', city: 'Islamabad' },
+            { quote: 'The Apex Card works everywhere. Zero fees abroad saved me a lot on my last trip.', name: 'Ayesha Malik', city: 'Islamabad' },
           ].map(t => (
             <div key={t.name} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <p className="leading-7 text-slate-600">"{t.quote}"</p>
@@ -178,7 +178,7 @@ export default function Home() {
       {/* 7. Final CTA */}
       <CTA
         title="Join thousands of customers banking smarter"
-        description="Open your MetaBank account today. No paperwork, no branch visits, no hidden fees."
+        description="Open your Apex Bank account today. No paperwork, no branch visits, no hidden fees."
         to="/register"
         label="Open Account"
       />

@@ -26,10 +26,10 @@ export default function About() {
     <>
       <PageHero
         dark
-        eyebrow="About MetaBank"
+        eyebrow="About Apex Bank"
         title="A banking experience shaped by"
         accent="clarity and trust."
-        description="MetaBank is a fictional digital banking concept created to demonstrate a modern, accessible and feature-rich financial services website."
+        description="Apex Bank is a fictional digital banking concept created to demonstrate a modern, accessible and feature-rich financial services website."
         action={{ to: '/personal', label: 'Explore services' }}
         secondary={{ to: '/contact', label: 'Contact' }}
       >
@@ -66,7 +66,7 @@ export default function About() {
 
       {/* Our Team — API data */}
       <section className="mx-auto max-w-7xl px-5 py-16">
-        <SectionTitle eyebrow="Our Team" title="The people behind MetaBank" description="Team data from JSONPlaceholder API." />
+        <SectionTitle eyebrow="Our Team" title="The people behind Apex Bank" description="Team data from JSONPlaceholder API." />
         {teamLoading && <p className="text-slate-500">Loading team…</p>}
         {teamError   && <p className="text-red-500">{teamError}</p>}
         {team.length > 0 && (
@@ -86,7 +86,7 @@ export default function About() {
       </section>
 
       <CTA
-        title="Explore what MetaBank offers"
+        title="Explore what Apex Bank offers"
         description="Browse personal and business services, cards, savings and the dashboard demo."
         to="/personal"
         label="Explore banking"

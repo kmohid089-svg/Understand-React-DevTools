@@ -18,7 +18,7 @@ function HeroCard({ frozen, tab }) {
   return (
     <div className="rounded-[2rem] bg-gradient-to-br from-slate-900 via-blue-950 to-blue-700 p-7 text-white shadow-2xl">
       <div className="flex items-start justify-between">
-        <span className="text-lg font-black">MetaBank</span>
+        <span className="text-lg font-black">Apex Bank</span>
         <CreditCard size={30} />
       </div>
       <p className="mt-16 text-sm text-blue-100">PLATINUM {tab.toUpperCase()} CARD</p>

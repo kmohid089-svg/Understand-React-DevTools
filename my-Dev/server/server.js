@@ -62,7 +62,7 @@ function authenticate(req, res, next) {
 }
 
 app.get("/", (req, res) => {
-  res.json({ message: "MetaBank API is running" });
+  res.json({ message: "Apex Bank API is running" });
 });
 
 app.post("/api/auth/register", async (req, res) => {
@@ -208,7 +208,7 @@ async function startServer() {
     console.log("MongoDB connected");
 
     app.listen(PORT, () => {
-      console.log(`MetaBank API: http://localhost:${PORT}`);
+      console.log(`Apex Bank API: http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Server startup failed:", error.message);

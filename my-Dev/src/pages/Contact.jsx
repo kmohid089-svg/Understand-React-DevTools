@@ -29,7 +29,7 @@ export default function Contact() {
   return (
     <>
       <PageHero
-        eyebrow="Contact MetaBank"
+        eyebrow="Contact Apex Bank"
         title="Let's start a"
         accent="conversation."
         description="Have a question about the website experience? Send a message using this local demo form."
@@ -38,7 +38,7 @@ export default function Contact() {
         <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-xl">
           <h2 className="text-2xl font-black text-slate-950">Get in touch</h2>
           <div className="mt-6 space-y-5">
-            <FeatureCard icon={Mail}   title="Email"  description="hello@metabank.example" />
+            <FeatureCard icon={Mail}   title="Email"  description="hello@apexbank.example" />
             <FeatureCard icon={Phone}  title="Phone"  description="+92 300 000 0000 (sample contact)" />
             <FeatureCard icon={MapPin} title="Office" description="Business district, Lahore, Pakistan (sample address)" />
           </div>
