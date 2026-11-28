@@ -17,6 +17,9 @@ import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
+import Activity from './pages/Activity';
+import Users from './pages/Users';
+import Approvals from './pages/Approvals';
 import Support from './pages/Support';
 import Contact from './pages/Contact';
 import About from './pages/About';
@@ -41,7 +44,10 @@ function Layout() {
         <Route path="/dashboard"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/transactions"element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
         <Route path="/profile"element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/admin-secret-panel"element={<Admin />} />
+        <Route path="/admin-secret-panel" element={<Admin />} />
+        <Route path="/admin-secret-panel/users" element={<Users />} />
+        <Route path="/admin-secret-panel/approvals" element={<Approvals />} />
+        <Route path="/admin-secret-panel/activity" element={<Activity />} />
         <Route path="/support"element={<Support />} />
         <Route path="/contact"element={<Contact />} />
         <Route path="/about"element={<About />} />

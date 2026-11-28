@@ -1,47 +1,32 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Landmark, Menu, X, ShieldCheck } from 'lucide-react';
+import { Landmark, ShieldCheck, Home, Users, CheckCircle, Activity } from 'lucide-react';
 
-const adminLinks = [
-  { label: 'Dashboard', to: '/admin-secret-panel' },
-  { label: 'Users', to: '/admin-secret-panel/users' },
-  { label: 'Approvals', to: '/admin-secret-panel/approvals' },
-  { label: 'Activity', to: '/admin-secret-panel/activity' },
-];
-
-const mobileAdminLinks = [
-  { label: 'Dashboard', to: '/admin-secret-panel' },
-  { label: 'Users', to: '/admin-secret-panel/users' },
-  { label: 'Approvals', to: '/admin-secret-panel/approvals' },
-  { label: 'Activity', to: '/admin-secret-panel/activity' },
+const bottomNavLinks = [
+  { label: 'Home', to: '/admin-secret-panel', icon: Home },
+  { label: 'Users', to: '/admin-secret-panel/users', icon: Users },
+  { label: 'Approvals', to: '/admin-secret-panel/approvals', icon: CheckCircle },
+  { label: 'Activity', to: '/admin-secret-panel/activity', icon: Activity },
 ];
 
 export function AdminLayout({ children }) {
-  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('Home');
   const navigate = useNavigate();
 
-  const [logoutTriggered, setLogoutTriggered] = useState(false);
-
-  function handleLogout() {
-    localStorage.removeItem('apex_admin_secret');
-    setLogoutTriggered(true);
-    setTimeout(() => navigate('/'), 500);
-  }
-
   // Show login screen if not authenticated
-  if (logoutTriggered || localStorage.getItem('apex_admin_secret') !== 'true') {
+  if (localStorage.getItem('apex_admin_secret') !== 'true') {
     return (
-      <main className="flex min-h-[80vh] items-center justify-center bg-slate-50 px-5">
-        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-10 shadow-xl">
-          <div className="mb-7 flex items-center gap-3">
+      <main className="flex min-h-[100vh] flex-col items-center justify-center bg-slate-50 px-5">
+        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+          <div className="mb-6 flex items-center justify-center gap-3">
             <span className="rounded-2xl bg-blue-700 p-2.5 text-white">
-              <ShieldCheck size={22} />
-            </span>
-            <span className="text-2xl font-black text-slate-950">
-              Admin Access
+              <ShieldCheck size={24} />
             </span>
           </div>
-          <p className="mb-7 text-sm text-slate-500">
+          <h2 className="mb-2 text-center text-2xl font-black text-slate-950">
+            Admin Access
+          </h2>
+          <p className="mb-6 text-center text-sm text-slate-500">
             Sign in to the Apex Bank admin panel.
           </p>
 
@@ -58,7 +43,7 @@ export function AdminLayout({ children }) {
                 e.target.error?.remove?.();
                 const errorDiv = document.createElement('div');
                 errorDiv.className =
-                  'mb-5 rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700';
+                  'mb-4 rounded-xl bg-red-50 p-3 text-sm font-semibold text-red-700';
                 errorDiv.textContent = 'Invalid secret credentials';
                 e.target.insertBefore(errorDiv, e.target.firstChild);
                 setTimeout(() => errorDiv.remove(), 3000);
@@ -72,7 +57,7 @@ export function AdminLayout({ children }) {
                 required
                 name="username"
                 placeholder="apexadmin"
-                className="mt-2 w-full rounded-xl border border-slate-200 p-4 font-normal outline-none focus:border-blue-600"
+                className="mt-1 w-full rounded-xl border border-slate-200 p-3 font-normal outline-none focus:border-blue-600"
               />
             </label>
             <label className="block text-sm font-bold text-slate-700">
@@ -82,21 +67,38 @@ export function AdminLayout({ children }) {
                 name="password"
                 type="password"
                 placeholder="Enter password"
-                className="mt-2 w-full rounded-xl border border-slate-200 p-4 font-normal outline-none focus:border-blue-600"
+                className="mt-1 w-full rounded-xl border border-slate-200 p-3 font-normal outline-none focus:border-blue-600"
               />
             </label>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-500">
-                Use: apexadmin / Ap3x2024$B@nk
-              </span>
-              <button
-                type="submit"
-                className="rounded-xl bg-blue-700 py-3 px-6 font-bold text-white hover:bg-blue-800"
-              >
-                Sign in
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-blue-700 py-3 text-sm font-bold text-white hover:bg-blue-800"
+            >
+              Sign in
+            </button>
           </form>
+          <p className="mt-4 text-center text-xs text-slate-400">
+            Use: apexadmin / Ap3x2024$B@nk
+          </p>
+        </div>
+
+        <div className="fixed bottom-0 left-0 right-0 border-t border-slate-200 bg-white p-2">
+          <div className="mx-auto flex max-w-md items-center justify-around">
+            <button
+              onClick={() => navigate('/')}
+              className="flex flex-col items-center gap-1 rounded-lg p-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              <Home size={20} />
+              <span>Home</span>
+            </button>
+            <button
+              onClick={() => navigate('/login')}
+              className="flex flex-col items-center gap-1 rounded-lg p-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            >
+              <Landmark size={20} />
+              <span>Bank</span>
+            </button>
+          </div>
         </div>
       </main>
     );
@@ -104,71 +106,38 @@ export function AdminLayout({ children }) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <Link
-            to="/admin-secret-panel"
-            className="flex items-center gap-3"
-            onClick={() => setOpen(false)}
-          >
-            <span className="rounded-2xl bg-blue-700 p-2.5 text-white">
-              <Landmark size={23} />
-            </span>
-            <span className="text-2xl font-black tracking-tight text-slate-950">
-              Apex <span className="text-blue-700">Admin</span>
-            </span>
-          </Link>
+      <main>{children}</main>
 
-          <nav className="hidden items-center gap-5 xl:flex">
-            {adminLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="text-sm font-semibold transition text-slate-600 hover:text-blue-700"
-              >
-                {l.label}
-              </Link>
-            ))}
-            <button
-              onClick={handleLogout}
-              className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-100"
+      {/* Bottom Admin Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="mx-auto flex max-w-3xl items-center justify-around px-2 py-2">
+          {bottomNavLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setActiveTab(link.label)}
+              className={`flex flex-col items-center gap-1 rounded-lg p-3 transition ${
+                activeTab === link.label
+                  ? 'text-blue-700'
+                  : 'text-slate-600 hover:text-blue-700'
+              }`}
             >
-              Log out
-            </button>
-          </nav>
-
+              <link.icon size={22} />
+              <span className="text-xs font-semibold">{link.label}</span>
+            </Link>
+          ))}
           <button
-            className="rounded-xl p-2 text-slate-800 xl:hidden"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
+            onClick={() => {
+              localStorage.removeItem('apex_admin_secret');
+              window.location.reload();
+            }}
+            className="flex flex-col items-center gap-1 rounded-lg p-3 text-red-600 hover:bg-red-50"
           >
-            {open ? <X /> : <Menu />}
+            <ShieldCheck size={22} />
+            <span className="text-xs font-semibold">Logout</span>
           </button>
         </div>
-
-        {open && (
-          <nav className="grid gap-1 border-t border-slate-200 bg-white p-4 xl:hidden">
-            {mobileAdminLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 font-semibold text-slate-700"
-              >
-                {l.label}
-              </Link>
-            ))}
-            <button
-              onClick={handleLogout}
-              className="mt-2 rounded-xl border border-slate-200 p-3 text-center font-bold"
-            >
-              Log out
-            </button>
-          </nav>
-        )}
-      </header>
-
-      <main>{children}</main>
+      </nav>
     </>
   );
 }
