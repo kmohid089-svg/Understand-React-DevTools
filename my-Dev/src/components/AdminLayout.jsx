@@ -9,8 +9,14 @@ const bottomNavLinks = [
   { label: 'Activity', to: '/admin-secret-panel/activity', icon: Activity },
 ];
 
+const bankLinks = [
+  { label: 'Main Bank', to: '/', icon: Landmark },
+  { label: 'Logout', to: null, action: 'logout', icon: ShieldCheck },
+];
+
 export function AdminLayout({ children }) {
   const [activeTab, setActiveTab] = useState('Home');
+  const [showBankMenu, setShowBankMenu] = useState(false);
   const navigate = useNavigate();
 
   // Show login screen if not authenticated
@@ -92,7 +98,7 @@ export function AdminLayout({ children }) {
               <span>Home</span>
             </button>
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
               className="flex flex-col items-center gap-1 rounded-lg p-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
               <Landmark size={20} />
@@ -109,35 +115,64 @@ export function AdminLayout({ children }) {
       <main>{children}</main>
 
       {/* Bottom Admin Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <div className="mx-auto flex max-w-3xl items-center justify-around px-2 py-2">
-          {bottomNavLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              onClick={() => setActiveTab(link.label)}
-              className={`flex flex-col items-center gap-1 rounded-lg p-3 transition ${
-                activeTab === link.label
-                  ? 'text-blue-700'
-                  : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              <link.icon size={22} />
-              <span className="text-xs font-semibold">{link.label}</span>
-            </Link>
-          ))}
-          <button
-            onClick={() => {
-              localStorage.removeItem('apex_admin_secret');
-              window.location.reload();
-            }}
-            className="flex flex-col items-center gap-1 rounded-lg p-3 text-red-600 hover:bg-red-50"
-          >
-            <ShieldCheck size={22} />
-            <span className="text-xs font-semibold">Logout</span>
-          </button>
-        </div>
-      </nav>
+      <div className="relative">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+          <div className="mx-auto flex max-w-3xl items-center justify-around px-2 py-2">
+            {bottomNavLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setActiveTab(link.label)}
+                className={`flex flex-col items-center gap-1 rounded-lg p-3 transition ${
+                  activeTab === link.label
+                    ? 'text-blue-700'
+                    : 'text-slate-600 hover:text-blue-700'
+                }`}
+              >
+                <link.icon size={22} />
+                <span className="text-xs font-semibold">{link.label}</span>
+              </Link>
+            ))}
+
+            {/* Bank Menu Button */}
+            <div className="relative">
+              <button
+                onClick={() => setShowBankMenu(!showBankMenu)}
+                className={`flex flex-col items-center gap-1 rounded-lg p-3 transition ${
+                  showBankMenu ? 'text-blue-700' : 'text-slate-600 hover:text-blue-700'
+                }`}
+              >
+                <Landmark size={22} />
+                <span className="text-xs font-semibold">Bank</span>
+              </button>
+
+              {/* Bank Dropdown */}
+              {showBankMenu && (
+                <div className="absolute bottom-full left-1/2 mb-2 w-40 -translate-x-1/2 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+                  {bankLinks.map((link) => (
+                    <button
+                      key={link.label}
+                      onClick={() => {
+                        if (link.action === 'logout') {
+                          localStorage.removeItem('apex_admin_secret');
+                          window.location.reload();
+                        } else {
+                          navigate(link.to);
+                          setShowBankMenu(false);
+                        }
+                      }}
+                      className="flex w-full items-center gap-3 rounded-lg p-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      <link.icon size={18} />
+                      <span>{link.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }
