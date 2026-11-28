@@ -10,7 +10,7 @@ const bottomNavLinks = [
 ];
 
 const bankLinks = [
-  { label: 'Main Bank', to: '/', icon: Landmark },
+  { label: 'Main Bank', to: '/', action: 'openNewTab', icon: Landmark },
   { label: 'Logout', to: null, action: 'logout', icon: ShieldCheck },
 ];
 
@@ -156,8 +156,8 @@ export function AdminLayout({ children }) {
                         if (link.action === 'logout') {
                           localStorage.removeItem('apex_admin_secret');
                           window.location.reload();
-                        } else {
-                          navigate(link.to);
+                        } else if (link.action === 'openNewTab') {
+                          window.open(link.to, '_blank');
                           setShowBankMenu(false);
                         }
                       }}
